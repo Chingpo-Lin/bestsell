@@ -45,9 +45,9 @@ public class ProductController {
     }
 
     @GetMapping("list_product_by_category_id")
-    public JsonData listProductByCategoryId(@RequestBody Category category) {
-
-        List<Product> productList = productService.getProductByUserId(category.getId());
+    public JsonData listProductByCategoryId(int categoryId) {
+        System.out.println(categoryId);
+        List<Product> productList = productService.getProductByCategoryId(categoryId);
         System.out.println(productList);
         return JsonData.buildSuccess(productList);
 
