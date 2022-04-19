@@ -23,6 +23,18 @@
         select *  from `product`
     </select>
 
+    <select id="getProductOnSell" resultMap="ProductResultMap">
+        select *  from `product` where `stock` != 0
+    </select>
+
+    <select id="getProductByUserId" resultMap="ProductResultMap">
+        select *  from `product` where `user_id` = #{userId,jdbcType=INTEGER}
+    </select>
+
+    <select id="getProductByCategoryId" resultMap="ProductResultMap">
+        select *  from `product` where `category_id` = #{categoryId,jdbcType=INTEGER}
+    </select>
+
     <insert id="sell" parameterType="com.webdesign.bestsell.domain.Product">
         INSERT INTO `product` (`user_id`, `price`, `img`, `description`, `create_date`, `stock`, `name`, `category_id`)
         VALUES (#{userId,jdbcType=INTEGER}, #{price,jdbcType=DOUBLE}, #{img,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR},

@@ -21,6 +21,7 @@ public class UserServiceImpl implements UserService {
 
     private static final String resource = "config/mybatis-config.xml";
     private SqlSessionFactory sqlSessionFactory;
+
     public static Map<String, User> sessionMap = new HashMap<>();
 
     public UserServiceImpl() throws IOException {
