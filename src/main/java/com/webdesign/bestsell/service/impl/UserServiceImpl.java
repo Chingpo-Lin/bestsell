@@ -60,8 +60,10 @@ public class UserServiceImpl implements UserService {
 
         try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
             UserDao userDao = sqlSession.getMapper(UserDao.class);
+
             User user = userDao.login(phone, pwd);
             System.out.println(user == null);
+            System.out.println(phone);
             if (user != null) {
                 String token = UUID.randomUUID().toString();
                 System.out.println(token);

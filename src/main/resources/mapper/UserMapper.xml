@@ -15,7 +15,7 @@
     </insert>
 
     <select id="login" resultType="com.webdesign.bestsell.domain.User">
-        select * from user where `phone` = #{phone,jdbcType=VARCHAR}
+        select * from user where `phone` = #{phone,jdbcType=VARCHAR} and `pwd` = #{pwd,jdbcType=VARCHAR}
     </select>
 
 </mapper>

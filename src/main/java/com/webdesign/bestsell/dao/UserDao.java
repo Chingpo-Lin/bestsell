@@ -1,6 +1,8 @@
 package com.webdesign.bestsell.dao;
 
 import com.webdesign.bestsell.domain.User;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -27,5 +29,5 @@ public interface UserDao {
      * @param pwd
      * @return
      */
-    User login(String phone, String pwd);
+    User login(@Param("phone") String phone, @Param("pwd") String pwd);
 }
