@@ -28,31 +28,18 @@ public class Product {
 
     private int categoryId;
 
-//    public Product(){}
-//
-//    public Product(int id, int userId, double price, String img, String description,
-//                   Date createDate, int stock, String name, int categoryId) {
-//        this.id = id;
-//        this.userId = userId;
-//        this.price = price;
-//        this.img = img;
-//        this.description = description;
-//        this.createDate = createDate;
-//        this.stock = stock;
-//        this.name = name;
-//        this.categoryId = categoryId;
-//    }
-//
-//    public Product(int userId, double price, String img, String description, int stock, String name, int categoryId) {
-//        this.userId = userId;
-//        this.price = price;
-//        this.img = img;
-//        this.description = description;
-//        this.stock = stock;
-//        this.name = name;
-//        this.categoryId = categoryId;
-//        this.createDate = new Date();
-//    }
+    public Product(){}
+
+    public Product(int userId, double price, String img, String description, int stock, String name, int categoryId) {
+        this.userId = userId;
+        this.price = price;
+        this.img = img;
+        this.description = description;
+        this.stock = stock;
+        this.name = name;
+        this.categoryId = categoryId;
+        this.createDate = new Date();
+    }
 
     public int getId() {
         return id;

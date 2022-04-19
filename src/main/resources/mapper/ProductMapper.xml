@@ -5,22 +5,6 @@
 
 <mapper namespace="com.webdesign.bestsell.dao.ProductDao">
 
-
-    <select id="getAllProduct" resultMap="ProductResultMap">
-        select *  from `product`
-    </select>
-
-<!--    <insert id="sell" parameterType="com.webdesign.bestsell.domain.Product">-->
-
-<!--&#45;&#45;         INSERT INTO `product` (`user_id`, `price`, `img`, `description`, `create_date`, `stock`, `name`, `category_id`)-->
-<!--&#45;&#45;         VALUES (1,2.3,'SDA','SDAS', NULL, 2, 'BOOKK', 2);-->
-<!--&#45;&#45;             (#{userId,jdbcType=INTEGER}, #{price,jdbcType=DOUBLE}, #{img,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR},-->
-<!--&#45;&#45;              #{createDate,jdbcType=TIMESTAPE}, #{stock,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{categoryId,jdbcType=INTEGER});-->
-
-<!--    </insert>-->
-
-
-
     <resultMap id="ProductResultMap" type="com.webdesign.bestsell.domain.Product">
 
         <id column="id" property="id" jdbcType="INTEGER"/>
@@ -34,5 +18,15 @@
         <result column="name" property="name" jdbcType="VARCHAR"/>
         <result column="category_id" property="categoryId" jdbcType="INTEGER"/>
     </resultMap>
+
+    <select id="getAllProduct" resultMap="ProductResultMap">
+        select *  from `product`
+    </select>
+
+    <insert id="sell" parameterType="com.webdesign.bestsell.domain.Product">
+        INSERT INTO `product` (`user_id`, `price`, `img`, `description`, `create_date`, `stock`, `name`, `category_id`)
+        VALUES (#{userId,jdbcType=INTEGER}, #{price,jdbcType=DOUBLE}, #{img,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR},
+             #{createDate,jdbcType=TIMESTAMP}, #{stock,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{categoryId,jdbcType=INTEGER});
+    </insert>
 
 </mapper>
