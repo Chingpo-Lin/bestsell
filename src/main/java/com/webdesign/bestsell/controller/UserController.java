@@ -3,6 +3,7 @@ package com.webdesign.bestsell.controller;
 import com.webdesign.bestsell.domain.User;
 import com.webdesign.bestsell.service.UserService;
 import com.webdesign.bestsell.utils.JsonData;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,6 +29,13 @@ public class UserController {
 
         List<User> userList = userService.listUser();
         System.out.println(userList);
-        return JsonData.buildSuccess("list");
+        return JsonData.buildSuccess(userList);
+    }
+
+    @PostMapping("login")
+    public JsonData login(@Param("phone") String phone, @Param("pwd") String pwd) {
+
+        String token = userService.login(phone, pwd);
+        return token != null ? JsonData.buildSuccess(token): JsonData.buildError("error of phone or pwd");
     }
 }

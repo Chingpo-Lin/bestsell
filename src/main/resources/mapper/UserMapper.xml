@@ -14,4 +14,8 @@
         (#{phone,jdbcType=VARCHAR},#{pwd,jdbcType=VARCHAR},#{name,jdbcType=VARCHAR},#{address,jdbcType=VARCHAR});
     </insert>
 
+    <select id="login" resultType="com.webdesign.bestsell.domain.User">
+        select * from user where `phone` = #{phone,jdbcType=VARCHAR}
+    </select>
+
 </mapper>
