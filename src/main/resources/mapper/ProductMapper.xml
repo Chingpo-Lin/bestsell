@@ -5,16 +5,34 @@
 
 <mapper namespace="com.webdesign.bestsell.dao.ProductDao">
 
-    <select id="getAllProduct" resultType="com.webdesign.bestsell.domain.Product">
-        select * from `product`
+
+    <select id="getAllProduct" resultMap="ProductResultMap">
+        select *  from `product`
     </select>
 
-<!--    <insert id="sell" parameterType="com.webdesign.bestsell.domain.Product" useGeneratedKeys="true" keyProperty="id" keyColumn="id">-->
-<!--        INSERT INTO `product` (`user_id`, `price`, `img`, `description`, `create_date`, `stock`, `name`, `category_id`)-->
-<!--        VALUES-->
-<!--            (#{userId,jdbcType=INTEGER}, #{price,jdbcType=DOUBLE}, #{img,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR},-->
-<!--             #{createDate,jdbcType=TIMESTAPE}, #{stock,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{categoryId,jdbcType=INTEGER});-->
+<!--    <insert id="sell" parameterType="com.webdesign.bestsell.domain.Product">-->
+
+<!--&#45;&#45;         INSERT INTO `product` (`user_id`, `price`, `img`, `description`, `create_date`, `stock`, `name`, `category_id`)-->
+<!--&#45;&#45;         VALUES (1,2.3,'SDA','SDAS', NULL, 2, 'BOOKK', 2);-->
+<!--&#45;&#45;             (#{userId,jdbcType=INTEGER}, #{price,jdbcType=DOUBLE}, #{img,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR},-->
+<!--&#45;&#45;              #{createDate,jdbcType=TIMESTAPE}, #{stock,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{categoryId,jdbcType=INTEGER});-->
 
 <!--    </insert>-->
+
+
+
+    <resultMap id="ProductResultMap" type="com.webdesign.bestsell.domain.Product">
+
+        <id column="id" property="id" jdbcType="INTEGER"/>
+
+        <result column="user_id" property="userId" jdbcType="INTEGER"/>
+        <result column="price" property="price" jdbcType="DOUBLE"/>
+        <result column="img" property="img" jdbcType="VARCHAR"/>
+        <result column="description" property="description" jdbcType="VARCHAR"/>
+        <result column="create_date" property="createDate" jdbcType="TIMESTAMP"/>
+        <result column="stock" property="stock" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="category_id" property="categoryId" jdbcType="INTEGER"/>
+    </resultMap>
 
 </mapper>
