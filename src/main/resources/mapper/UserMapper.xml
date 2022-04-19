@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.webdesign.bestsell.dao.UserDao">
+
+    <select id="listUser" resultType="com.webdesign.bestsell.domain.User">
+        select * from user
+    </select>
+
+    <insert id="signUpUser" parameterType="com.webdesign.bestsell.domain.User" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        INSERT INTO `user` (`phone`, `pwd`, `name`, `address`) VALUES
+        (#{phone,jdbcType=VARCHAR},#{pwd,jdbcType=VARCHAR},#{name,jdbcType=VARCHAR},#{address,jdbcType=VARCHAR});
+    </insert>
+
+</mapper>
