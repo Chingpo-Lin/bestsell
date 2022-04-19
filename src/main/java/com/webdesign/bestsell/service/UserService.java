@@ -9,4 +9,6 @@ public interface UserService {
     List<User> listUser();
 
     int signup(User user);
+
+    String login(String phone, String pwd);
 }

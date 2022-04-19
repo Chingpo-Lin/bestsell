@@ -20,4 +20,12 @@ public interface UserDao {
      * @return
      */
     List<User> listUser();
+
+    /**
+     * login
+     * @param phone
+     * @param pwd
+     * @return
+     */
+    User login(String phone, String pwd);
 }

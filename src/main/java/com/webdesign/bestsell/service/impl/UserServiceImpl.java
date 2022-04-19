@@ -11,13 +11,17 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 @Service
 public class UserServiceImpl implements UserService {
 
     private static final String resource = "config/mybatis-config.xml";
     private SqlSessionFactory sqlSessionFactory;
+    public static Map<String, User> sessionMap = new HashMap<>();
 
     public UserServiceImpl() throws IOException {
 
@@ -43,15 +47,32 @@ public class UserServiceImpl implements UserService {
 
         try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
             UserDao userDao = sqlSession.getMapper(UserDao.class);
-            User newUser = new User(user.getPhone(), user.getPwd(), user.getName(), user.getAddress());
-            int row = userDao.signUpUser(newUser);
-            System.out.println("row:" + row);
-            System.out.println("userid:" + newUser.getId());
-            System.out.println("username:" + user.getName());
+            int row = userDao.signUpUser(user);
             return row;
         } catch (Exception e) {
             e.printStackTrace();
         }
         return 0;
+    }
+
+    @Override
+    public String login(String phone, String pwd) {
+
+        try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
+            UserDao userDao = sqlSession.getMapper(UserDao.class);
+            User user = userDao.login(phone, pwd);
+            System.out.println(user == null);
+            if (user != null) {
+                String token = UUID.randomUUID().toString();
+                System.out.println(token);
+                sessionMap.put(token, user);
+                return token;
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
