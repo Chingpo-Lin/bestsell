@@ -12,6 +12,8 @@ public class User {
 
     private String address;
 
+    public User() {}
+
     public User(String phone, String pwd, String name, String address) {
         this.phone = phone;
         this.pwd = pwd;
