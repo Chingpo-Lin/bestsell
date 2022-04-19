@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.webdesign.bestsell.dao.ProductDao">
+
+    <select id="getAllProduct" resultType="com.webdesign.bestsell.domain.Product">
+        select * from `product`
+    </select>
+
+<!--    <insert id="sell" parameterType="com.webdesign.bestsell.domain.Product" useGeneratedKeys="true" keyProperty="id" keyColumn="id">-->
+<!--        INSERT INTO `product` (`user_id`, `price`, `img`, `description`, `create_date`, `stock`, `name`, `category_id`)-->
+<!--        VALUES-->
+<!--            (#{userId,jdbcType=INTEGER}, #{price,jdbcType=DOUBLE}, #{img,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR},-->
+<!--             #{createDate,jdbcType=TIMESTAPE}, #{stock,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{categoryId,jdbcType=INTEGER});-->
+
+<!--    </insert>-->
+
+</mapper>

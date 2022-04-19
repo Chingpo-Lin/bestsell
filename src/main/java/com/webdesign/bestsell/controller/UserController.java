@@ -24,7 +24,7 @@ public class UserController {
         return row > 0 ? JsonData.buildSuccess(user.getName()): JsonData.buildError("cannot signup");
     }
 
-    @GetMapping("listUser")
+    @GetMapping("list_user")
     public JsonData listUser() {
 
         List<User> userList = userService.listUser();
