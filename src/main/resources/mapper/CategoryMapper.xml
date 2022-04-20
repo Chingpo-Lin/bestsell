@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.webdesign.bestsell.dao.CategoryDao">
+
+    <resultMap id="CategoryResultMap" type="com.webdesign.bestsell.domain.Category">
+
+        <id column="id" property="id" jdbcType="INTEGER"/>
+
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="getAllCategory" resultMap="CategoryResultMap">
+        select * from category
+    </select>
+
+
+</mapper>
