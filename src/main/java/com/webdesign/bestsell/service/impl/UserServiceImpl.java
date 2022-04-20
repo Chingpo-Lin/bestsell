@@ -1,6 +1,8 @@
 package com.webdesign.bestsell.service.impl;
 
+import com.webdesign.bestsell.dao.CartDao;
 import com.webdesign.bestsell.dao.UserDao;
+import com.webdesign.bestsell.domain.Cart;
 import com.webdesign.bestsell.domain.User;
 import com.webdesign.bestsell.service.UserService;
 import org.apache.ibatis.io.Resources;
@@ -73,6 +75,17 @@ public class UserServiceImpl implements UserService {
             } else {
                 return null;
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public List<Cart> getCartByUserId(int userId) {
+        try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
+            CartDao cartDao = sqlSession.getMapper(CartDao.class);
+            return cartDao.getCartByUserId(userId);
         } catch (Exception e) {
             e.printStackTrace();
         }
