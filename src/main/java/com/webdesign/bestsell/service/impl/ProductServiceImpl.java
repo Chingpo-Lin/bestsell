@@ -1,7 +1,9 @@
 package com.webdesign.bestsell.service.impl;
 
+import com.webdesign.bestsell.dao.CategoryDao;
 import com.webdesign.bestsell.dao.ProductDao;
 import com.webdesign.bestsell.dao.UserDao;
+import com.webdesign.bestsell.domain.Category;
 import com.webdesign.bestsell.domain.Product;
 import com.webdesign.bestsell.domain.User;
 import com.webdesign.bestsell.service.ProductService;
@@ -80,4 +82,39 @@ public class ProductServiceImpl implements ProductService {
         }
         return 0;
     }
+
+    @Override
+    public List<Category> getAllCategory() {
+        try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
+            CategoryDao categoryDao = sqlSession.getMapper(CategoryDao.class);
+            return categoryDao.getAllCategory();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public Product getProductById(int id) {
+        try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
+            ProductDao productDao = sqlSession.getMapper(ProductDao.class);
+            return productDao.getProductById(id);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public int updateStock(Product product) {
+        try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
+            ProductDao productDao = sqlSession.getMapper(ProductDao.class);
+            return productDao.updateProduct(product);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+
 }

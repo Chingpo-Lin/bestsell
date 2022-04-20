@@ -19,6 +19,10 @@
         <result column="category_id" property="categoryId" jdbcType="INTEGER"/>
     </resultMap>
 
+    <select id="getProductById" resultMap="ProductResultMap">
+        select *  from `product` where `id` = #{id,jdbcType=INTEGER}
+    </select>
+
     <select id="getAllProduct" resultMap="ProductResultMap">
         select *  from `product`
     </select>
@@ -41,4 +45,20 @@
              #{createDate,jdbcType=TIMESTAMP}, #{stock,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{categoryId,jdbcType=INTEGER});
     </insert>
 
+    <update id="updateProduct" parameterType="com.webdesign.bestsell.domain.Product">
+
+        update product
+
+        <trim prefix="set" suffixOverrides=",">
+
+            <if test="price != null "> price = #{price,jdbcType=DOUBLE},</if>
+            <if test="img != null "> img = #{img,jdbcType=VARCHAR},</if>
+            <if test="description != null "> description = #{description,jdbcType=VARCHAR},</if>
+            <if test="stock != 0 "> stock = #{stock,jdbcType=INTEGER},</if>
+            <if test="name != null "> `name` = #{name,jdbcType=VARCHAR},</if>
+            <if test="categoryId != null "> category_id = #{categoryId,jdbcType=INTEGER},</if>
+        </trim>
+        where
+        id=#{id}
+    </update>
 </mapper>
