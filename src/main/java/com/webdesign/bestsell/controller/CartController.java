@@ -25,4 +25,12 @@ public class CartController {
         System.out.println(cartList);
         return JsonData.buildSuccess(cartList);
     }
+
+    @GetMapping("delete_cart")
+    public JsonData deleteCartByCartId() {
+        int id = 1;
+        int row = userService.deleteItemFromCart(id);
+        System.out.println(row);
+        return JsonData.buildSuccess(row);
+    }
 }

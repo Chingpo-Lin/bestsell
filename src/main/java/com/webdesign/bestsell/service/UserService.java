@@ -14,4 +14,6 @@ public interface UserService {
     String login(String phone, String pwd);
 
     List<Cart> getCartByUserId(int userId);
+
+    int deleteItemFromCart(int cartId);
 }

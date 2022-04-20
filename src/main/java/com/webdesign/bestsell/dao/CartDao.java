@@ -14,5 +14,10 @@ public interface CartDao {
      */
     List<Cart> getCartByUserId(int userId);
 
-
+    /**
+     * delete one product in cart by cart id
+     * @param cartId
+     * @return
+     */
+    int deleteCartByCartId(int cartId);
 }

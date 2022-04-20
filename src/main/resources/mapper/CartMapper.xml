@@ -17,4 +17,8 @@
         select * from cart where user_id = #{userId,jdbcType=INTEGER}
     </select>
 
+    <delete id="deleteCartByCartId" parameterType="int">
+        delete from cart where id = #{id,jdbcType=INTEGER}
+    </delete>
+
 </mapper>

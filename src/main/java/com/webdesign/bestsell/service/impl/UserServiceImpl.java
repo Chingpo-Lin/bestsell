@@ -91,4 +91,15 @@ public class UserServiceImpl implements UserService {
         }
         return null;
     }
+
+    @Override
+    public int deleteItemFromCart(int cardId) {
+        try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
+            CartDao cartDao = sqlSession.getMapper(CartDao.class);
+            return cartDao.deleteCartByCartId(cardId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
 }
