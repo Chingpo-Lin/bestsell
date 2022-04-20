@@ -22,7 +22,7 @@ public class Product {
     @JsonFormat(pattern="yyyy-MM-dd hh:mm:ss", locale="zh", timezone = "GMT+8")
     private Date createDate;
 
-    private int stock;
+    private Integer stock;
 
     private String name;
 
@@ -89,7 +89,7 @@ public class Product {
         this.createDate = createDate;
     }
 
-    public int getStock() {
+    public Integer getStock() {
         return stock;
     }
 

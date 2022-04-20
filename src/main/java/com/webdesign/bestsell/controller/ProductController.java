@@ -54,8 +54,8 @@ public class ProductController {
     }
 
     @PostMapping("sell")
-    public JsonData sellProduct() {
-        Product product = new Product(777, 7.7, "image", "This is a test", 7, "Test", 7);
+    public JsonData sellProduct(@RequestBody Product product) {
+//        Product product = new Product(777, 7.7, "image", "This is a test", 7, "Test", 7);
         int row = productService.sell(product);
 
         return row > 0 ? JsonData.buildSuccess(product.getName()): JsonData.buildError("cannot sell");

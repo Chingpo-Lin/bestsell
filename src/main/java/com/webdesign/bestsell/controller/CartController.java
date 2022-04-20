@@ -30,7 +30,7 @@ public class CartController {
 
     @GetMapping("delete_cart")
     public JsonData deleteCartByCartId() {
-        int id = 1;
+        int id = 7;
         int row = userService.deleteItemFromCart(id);
         System.out.println(row);
         return JsonData.buildSuccess(row);
