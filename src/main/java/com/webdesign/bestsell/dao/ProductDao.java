@@ -38,4 +38,14 @@ public interface ProductDao {
      * @return
      */
     int sell(Product product);
+
+    /**
+     * get product by id;
+     * @param id
+     * @return
+     */
+    Product getProductById(int id);
+
+    int updateProduct(Product product);
+
 }

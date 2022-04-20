@@ -17,6 +17,12 @@
         select * from cart where user_id = #{userId,jdbcType=INTEGER}
     </select>
 
+    <insert id="addToCart" parameterType="com.webdesign.bestsell.domain.Cart">
+        INSERT INTO `cart` (`user_id`, `product_id`)
+        VALUES (#{userId,jdbcType=INTEGER}, #{productId,jdbcType=INTEGER});
+
+    </insert>
+
     <delete id="deleteCartByCartId" parameterType="int">
         delete from cart where id = #{id,jdbcType=INTEGER}
     </delete>

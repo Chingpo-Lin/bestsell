@@ -13,7 +13,7 @@ public class Product {
 
     private int userId;
 
-    private double price;
+    private Double price;
 
     private String img;
 
@@ -30,7 +30,7 @@ public class Product {
 
     public Product(){}
 
-    public Product(int userId, double price, String img, String description, int stock, String name, int categoryId) {
+    public Product(int userId, Double price, String img, String description, int stock, String name, int categoryId) {
         this.userId = userId;
         this.price = price;
         this.img = img;
@@ -57,7 +57,7 @@ public class Product {
         this.userId = userId;
     }
 
-    public double getPrice() {
+    public Double getPrice() {
         return price;
     }
 

@@ -93,4 +93,28 @@ public class ProductServiceImpl implements ProductService {
         }
         return null;
     }
+
+    @Override
+    public Product getProductById(int id) {
+        try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
+            ProductDao productDao = sqlSession.getMapper(ProductDao.class);
+            return productDao.getProductById(id);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public int updateStock(Product product) {
+        try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
+            ProductDao productDao = sqlSession.getMapper(ProductDao.class);
+            return productDao.updateProduct(product);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+
 }

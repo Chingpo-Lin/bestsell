@@ -15,5 +15,9 @@ public interface ProductService {
 
     int sell(Product product);
 
-    public List<Category> getAllCategory();
+    List<Category> getAllCategory();
+
+    Product getProductById(int id);
+
+    int updateStock(Product product);
 }

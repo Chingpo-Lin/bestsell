@@ -1,8 +1,10 @@
 package com.webdesign.bestsell.service.impl;
 
 import com.webdesign.bestsell.dao.CartDao;
+import com.webdesign.bestsell.dao.OrderDao;
 import com.webdesign.bestsell.dao.UserDao;
 import com.webdesign.bestsell.domain.Cart;
+import com.webdesign.bestsell.domain.Order;
 import com.webdesign.bestsell.domain.User;
 import com.webdesign.bestsell.service.UserService;
 import org.apache.ibatis.io.Resources;
@@ -101,5 +103,38 @@ public class UserServiceImpl implements UserService {
             e.printStackTrace();
         }
         return 0;
+    }
+
+    @Override
+    public int addToCart(Cart cart) {
+        try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
+            CartDao cartDao = sqlSession.getMapper(CartDao.class);
+            return cartDao.addToCart(cart);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    @Override
+    public int placeOrder(Order order) {
+        try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
+            OrderDao orderDao = sqlSession.getMapper(OrderDao.class);
+            return orderDao.placeOrder(order);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    @Override
+    public List<Order> getAllOrderByUserId(int userId) {
+        try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
+            OrderDao orderDao = sqlSession.getMapper(OrderDao.class);
+            return orderDao.getOrderByUserId(userId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

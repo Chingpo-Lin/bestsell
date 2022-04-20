@@ -20,4 +20,11 @@ public interface CartDao {
      * @return
      */
     int deleteCartByCartId(int cartId);
+
+    /**
+     * add items to cart
+     * @param cart
+     * @return
+     */
+    int addToCart(Cart cart);
 }

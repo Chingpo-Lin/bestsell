@@ -20,5 +20,6 @@
         <mapper resource="mapper/ProductMapper.xml"/>
         <mapper resource="mapper/CartMapper.xml"/>
         <mapper resource="mapper/CategoryMapper.xml"/>
+        <mapper resource="mapper/OrderMapper.xml"/>
     </mappers>
 </configuration>
