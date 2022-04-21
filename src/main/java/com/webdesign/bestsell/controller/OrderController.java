@@ -13,7 +13,7 @@ import java.util.Date;
 import java.util.List;
 
 @RestController
-@RequestMapping("/bestsell/pri/order")
+@RequestMapping("/pri/order")
 public class OrderController {
 
     @Autowired
@@ -53,6 +53,7 @@ public class OrderController {
 
         // update items stock
         product.setStock(product.getStock() - 1);
+        System.out.println(product.getStock());
         int row = productService.updateStock(product);
         if (row <= 0) {
             return JsonData.buildError("error when attempt to get item");
