@@ -13,7 +13,7 @@ import java.util.Date;
 import java.util.List;
 
 @RestController
-@RequestMapping("/bestsell/pri/order")
+@RequestMapping("/pri/order")
 public class OrderController {
 
     @Autowired

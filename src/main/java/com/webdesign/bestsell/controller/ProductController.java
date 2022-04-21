@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/bestsell/pub/product")
+@RequestMapping("/pub/product")
 public class ProductController {
 
     @Autowired
@@ -53,7 +53,7 @@ public class ProductController {
 
     }
 
-    @PostMapping("sell")
+    @PostMapping("sell_product")
     public JsonData sellProduct(@RequestBody Product product) {
 //        Product product = new Product(777, 7.7, "image", "This is a test", 7, "Test", 7);
         int row = productService.sell(product);

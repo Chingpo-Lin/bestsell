@@ -8,10 +8,11 @@ import com.webdesign.bestsell.utils.JsonData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/bestsell/pri/cart")
+@RequestMapping("/pri/cart")
 public class CartController {
 
     @Autowired
@@ -20,12 +21,19 @@ public class CartController {
     @Autowired
     public ProductService productService;
 
-    @GetMapping("get_user_cart")
+    @GetMapping("get_product_in_cart")
     public JsonData getCartByUserId() {
-        int id = 1;
+        int id = 2;
         List<Cart> cartList = userService.getCartByUserId(id);
-        System.out.println(cartList);
-        return JsonData.buildSuccess(cartList);
+
+        List<Product> productList = new ArrayList<>();
+        for (Cart cart: cartList) {
+            int productId = cart.getProductId();
+            productList.add(productService.getProductById(productId));
+        }
+
+        System.out.println(productList);
+        return JsonData.buildSuccess(productList);
     }
 
     @GetMapping("delete_cart")
