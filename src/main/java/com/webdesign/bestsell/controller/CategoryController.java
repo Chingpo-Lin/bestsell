@@ -18,6 +18,11 @@ public class CategoryController {
     @Autowired
     public ProductService productService;
 
+    /**
+     * get all category
+     * localhost:8080/pub/category/get_all_category
+     * @return
+     */
     @GetMapping("get_all_category")
     public JsonData getAllCategory() {
         List<Category> categoryList = productService.getAllCategory();

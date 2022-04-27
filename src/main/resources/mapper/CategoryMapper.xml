@@ -5,7 +5,7 @@
 
 <mapper namespace="com.webdesign.bestsell.dao.CategoryDao">
 
-    <resultMap id="CategoryResultMap" type="com.webdesign.bestsell.domain.Category">
+    <resultMap id="CategoryResultMap" type="Category">
 
         <id column="id" property="id" jdbcType="INTEGER"/>
 

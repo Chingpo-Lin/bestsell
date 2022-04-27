@@ -11,6 +11,7 @@ import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -23,118 +24,66 @@ import java.util.UUID;
 @Service
 public class UserServiceImpl implements UserService {
 
-    private static final String resource = "config/mybatis-config.xml";
-    private SqlSessionFactory sqlSessionFactory;
+    @Autowired
+    private CartDao cartDao;
+
+    @Autowired
+    private UserDao userDao;
+
+    @Autowired
+    private OrderDao orderDao;
 
     public static Map<String, User> sessionMap = new HashMap<>();
 
-    public UserServiceImpl() throws IOException {
-
-        InputStream inputStream = Resources.getResourceAsStream(resource);
-        sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
-
-    }
-
     @Override
     public List<User> listUser() {
-        try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
-            UserDao userDao = sqlSession.getMapper(UserDao.class);
-            List<User> list = userDao.listUser();
-            return list;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
+        List<User> list = userDao.listUser();
+        return list;
     }
 
     @Override
     public int signup(User user) {
-
-        try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
-            UserDao userDao = sqlSession.getMapper(UserDao.class);
-            int row = userDao.signUpUser(user);
-            return row;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return 0;
+        int row = userDao.signUpUser(user);
+        return row;
     }
 
     @Override
     public String login(String phone, String pwd) {
-
-        try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
-            UserDao userDao = sqlSession.getMapper(UserDao.class);
-
-            User user = userDao.login(phone, pwd);
-            System.out.println(user == null);
-            System.out.println(phone);
-            if (user != null) {
-                String token = UUID.randomUUID().toString();
-                System.out.println(token);
-                sessionMap.put(token, user);
-                return token;
-            } else {
-                return null;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        User user = userDao.login(phone, pwd);
+        System.out.println(user == null);
+        System.out.println(phone);
+        if (user != null) {
+            String token = UUID.randomUUID().toString();
+            System.out.println(token);
+            sessionMap.put(token, user);
+            return token;
+        } else {
+            return null;
         }
-        return null;
     }
 
     @Override
     public List<Cart> getCartByUserId(int userId) {
-        try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
-            CartDao cartDao = sqlSession.getMapper(CartDao.class);
-            return cartDao.getCartByUserId(userId);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
+        return cartDao.getCartByUserId(userId);
     }
 
     @Override
     public int deleteItemFromCart(int cardId) {
-        try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
-            CartDao cartDao = sqlSession.getMapper(CartDao.class);
-            return cartDao.deleteCartByCartId(cardId);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return 0;
+        return cartDao.deleteCartByCartId(cardId);
     }
 
     @Override
     public int addToCart(Cart cart) {
-        try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
-            CartDao cartDao = sqlSession.getMapper(CartDao.class);
-            return cartDao.addToCart(cart);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return 0;
+        return cartDao.addToCart(cart);
     }
 
     @Override
     public int placeOrder(Order order) {
-        try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
-            OrderDao orderDao = sqlSession.getMapper(OrderDao.class);
-            return orderDao.placeOrder(order);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return 0;
+        return orderDao.placeOrder(order);
     }
 
     @Override
     public List<Order> getAllOrderByUserId(int userId) {
-        try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
-            OrderDao orderDao = sqlSession.getMapper(OrderDao.class);
-            return orderDao.getOrderByUserId(userId);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
+        return orderDao.getOrderByUserId(userId);
     }
 }

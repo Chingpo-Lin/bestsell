@@ -22,6 +22,11 @@ public class OrderController {
     @Autowired
     public ProductService productService;
 
+    /**
+     * get order of given user
+     * localhost:8080/pri/order/get_user_order
+     * @return
+     */
     @GetMapping("get_user_order")
     public JsonData getOrderByUserId() {
         int id = 1;
@@ -30,8 +35,19 @@ public class OrderController {
         return JsonData.buildSuccess(orderList);
     }
 
+    /**
+     * place order
+     * localhost:8080/pri/order/place_order
+     * format:
+     * {
+     *     "userId":2,
+     *     "productId":2
+     * }
+     * @param order
+     * @return
+     */
     @PostMapping("place_order")
-    public JsonData sellProduct(@RequestBody Order order) {
+    public JsonData placeOrder(@RequestBody Order order) {
 
         order.setCreateTime(new Date());
 
@@ -51,6 +67,10 @@ public class OrderController {
             }
         }
 
+        // TODO
+        // remove items from user cart
+
+
         // update items stock
         product.setStock(product.getStock() - 1);
         System.out.println(product.getStock());
@@ -62,4 +82,7 @@ public class OrderController {
 
         return row > 0 ? JsonData.buildSuccess(order): JsonData.buildError("success place");
     }
+
+    // TODO
+    // check out (calculate total cost)
 }

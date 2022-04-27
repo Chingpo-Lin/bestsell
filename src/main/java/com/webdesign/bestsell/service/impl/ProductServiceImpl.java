@@ -11,6 +11,7 @@ import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -22,14 +23,12 @@ import java.util.Map;
 @Service
 public class ProductServiceImpl implements ProductService {
 
-    private static final String resource = "config/mybatis-config.xml";
-    private SqlSessionFactory sqlSessionFactory;
+    @Autowired
+    private ProductDao productDao;
 
-    public ProductServiceImpl() throws IOException {
-        InputStream inputStream = Resources.getResourceAsStream(resource);
-        sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
+    @Autowired
+    private CategoryDao categoryDao;
 
-    }
     /**
      * list product by given if on stock
      * @param stock
@@ -37,83 +36,40 @@ public class ProductServiceImpl implements ProductService {
      */
     @Override
     public List<Product> listProduct(boolean stock) {
-        try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
-            ProductDao productDao = sqlSession.getMapper(ProductDao.class);
-            if (stock) {
-                return productDao.getProductOnSell();
-            }
-            return productDao.getAllProduct();
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (stock) {
+            return productDao.getProductOnSell();
         }
-        return null;
+        return productDao.getAllProduct();
     }
 
     @Override
     public List<Product> getProductByUserId(int userId) {
-
-        try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
-            ProductDao productDao = sqlSession.getMapper(ProductDao.class);
-            return productDao.getProductByUserId(userId);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
+        return productDao.getProductByUserId(userId);
     }
 
     @Override
     public List<Product> getProductByCategoryId(int categoryId) {
-        try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
-            ProductDao productDao = sqlSession.getMapper(ProductDao.class);
-            return productDao.getProductByCategoryId(categoryId);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
+        return productDao.getProductByCategoryId(categoryId);
     }
 
     @Override
     public int sell(Product product) {
-        try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
-            ProductDao productDao = sqlSession.getMapper(ProductDao.class);
-            return productDao.sell(product);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return 0;
+        return productDao.sell(product);
     }
 
     @Override
     public List<Category> getAllCategory() {
-        try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
-            CategoryDao categoryDao = sqlSession.getMapper(CategoryDao.class);
-            return categoryDao.getAllCategory();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
+        return categoryDao.getAllCategory();
     }
 
     @Override
     public Product getProductById(int id) {
-        try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
-            ProductDao productDao = sqlSession.getMapper(ProductDao.class);
-            return productDao.getProductById(id);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
+        return productDao.getProductById(id);
     }
 
     @Override
     public int updateStock(Product product) {
-        try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
-            ProductDao productDao = sqlSession.getMapper(ProductDao.class);
-            return productDao.updateProduct(product);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return 0;
+        return productDao.updateProduct(product);
     }
 
 
