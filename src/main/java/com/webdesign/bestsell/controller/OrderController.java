@@ -90,7 +90,7 @@ public class OrderController {
 
     /**
      * checkout and get the total price
-     *
+     * localhost:8080/pri/order/checkout
      * @return
      */
     @GetMapping("checkout")
