@@ -36,8 +36,6 @@ public class CartController {
             int productId = cart.getProductId();
             productList.add(productService.getProductById(productId));
         }
-
-        System.out.println(productList);
         return JsonData.buildSuccess(productList);
     }
 
@@ -50,7 +48,6 @@ public class CartController {
     public JsonData deleteCartByCartId() {
         int id = 0; // change
         int row = userService.deleteItemFromCart(id);
-        System.out.println(row);
         return JsonData.buildSuccess(row);
     }
 
@@ -79,7 +76,6 @@ public class CartController {
         }
 
         int row = userService.addToCart(cart);
-        System.out.println(row);
         return JsonData.buildSuccess(row);
     }
 }

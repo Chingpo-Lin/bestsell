@@ -86,4 +86,9 @@ public class UserServiceImpl implements UserService {
     public List<Order> getAllOrderByUserId(int userId) {
         return orderDao.getOrderByUserId(userId);
     }
+
+    @Override
+    public User findUserByPhone(String phone) {
+        return userDao.findUserByPhone(phone);
+    }
 }

@@ -30,4 +30,6 @@ public interface UserDao {
      * @return
      */
     User login(@Param("phone") String phone, @Param("pwd") String pwd);
+
+    User findUserByPhone(@Param("phone") String phone);
 }

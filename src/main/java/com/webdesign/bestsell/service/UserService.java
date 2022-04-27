@@ -23,4 +23,6 @@ public interface UserService {
     int placeOrder(Order order);
 
     List<Order> getAllOrderByUserId(int userId);
+
+    User findUserByPhone(String phone);
 }
