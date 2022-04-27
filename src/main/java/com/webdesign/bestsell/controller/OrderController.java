@@ -7,6 +7,7 @@ import com.webdesign.bestsell.service.ProductService;
 import com.webdesign.bestsell.service.UserService;
 import com.webdesign.bestsell.utils.JsonData;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
@@ -47,10 +48,12 @@ public class OrderController {
      * @return
      */
     @PostMapping("place_order")
+    @Transactional
     public JsonData placeOrder(@RequestBody Order order) {
 
-        order.setCreateTime(new Date());
+        int userId = order.getUserId();
 
+        order.setCreateTime(new Date());
         int productId = order.getProductId();
 
         // if there is items left
@@ -60,16 +63,18 @@ public class OrderController {
         }
 
         // if item is from current user
-        List<Product> products = productService.getProductByUserId(order.getUserId());
+        List<Product> products = productService.getProductByUserId(userId);
         for (Product p: products) {
             if (p.getId() == productId) {
                 return JsonData.buildError("It's your item!");
             }
         }
 
-        // TODO
         // remove items from user cart
-
+        List<Cart> cartList = userService.getCartByUserId(userId);
+        for (Cart cart: cartList) {
+            userService.deleteItemFromCart(cart.getId());
+        }
 
         // update items stock
         product.setStock(product.getStock() - 1);
@@ -83,6 +88,19 @@ public class OrderController {
         return row > 0 ? JsonData.buildSuccess(order): JsonData.buildError("success place");
     }
 
-    // TODO
-    // check out (calculate total cost)
+    /**
+     * checkout and get the total price
+     *
+     * @return
+     */
+    @GetMapping("checkout")
+    public JsonData checkOut() {
+        int userId = 1;
+        List<Cart> cartList = userService.getCartByUserId(userId);
+        double totalPrice = 0;
+        for (Cart cart: cartList) {
+            totalPrice += productService.getProductById(cart.getProductId()).getPrice();
+        }
+        return JsonData.buildSuccess(totalPrice);
+    }
 }
