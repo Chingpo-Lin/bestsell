@@ -17,6 +17,12 @@ public class UserController {
     @Autowired
     public UserService userService;
 
+    /**
+     * sign up user
+     * localhost:8080/pub/user/signup
+     * @param user
+     * @return
+     */
     @PostMapping("signup")
     public JsonData signup(@RequestBody User user) {
 
@@ -25,6 +31,11 @@ public class UserController {
         return row > 0 ? JsonData.buildSuccess(user.getName()): JsonData.buildError("cannot signup");
     }
 
+    /**
+     * list user
+     * localhost:8080/pub/user/list_user
+     * @return
+     */
     @GetMapping("list_user")
     public JsonData listUser() {
 
@@ -33,6 +44,12 @@ public class UserController {
         return JsonData.buildSuccess(userList);
     }
 
+    /**
+     * login user
+     * localhost:8080/pub/user/login
+     * @param user
+     * @return
+     */
     @PostMapping("login")
     public JsonData login(@RequestBody User user) {
 

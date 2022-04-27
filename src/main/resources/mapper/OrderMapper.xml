@@ -5,7 +5,7 @@
 
 <mapper namespace="com.webdesign.bestsell.dao.OrderDao">
 
-    <resultMap id="OrderResultMap" type="com.webdesign.bestsell.domain.Order">
+    <resultMap id="OrderResultMap" type="Order">
 
         <id column="id" property="id" jdbcType="INTEGER"/>
 
@@ -18,7 +18,7 @@
         select * from `order` where user_id = #{userId,jdbcType=INTEGER}
     </select>
 
-    <insert id="placeOrder" parameterType="com.webdesign.bestsell.domain.Order">
+    <insert id="placeOrder" parameterType="Order">
 
         INSERT INTO `order` (`user_id`, `product_id`, `create_time`)
         VALUES (#{userId,jdbcType=INTEGER}, #{productId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP});

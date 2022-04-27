@@ -21,6 +21,11 @@ public class CartController {
     @Autowired
     public ProductService productService;
 
+    /**
+     * get product in current user's cart
+     * localhost:8080/pri/cart/get_product_in_cart
+     * @return
+     */
     @GetMapping("get_product_in_cart")
     public JsonData getCartByUserId() {
         int id = 2;
@@ -36,14 +41,30 @@ public class CartController {
         return JsonData.buildSuccess(productList);
     }
 
+    /**
+     * delete cart by cart id
+     * localhost:8080/pri/cart/delete_cart
+     * @return
+     */
     @GetMapping("delete_cart")
     public JsonData deleteCartByCartId() {
-        int id = 7;
+        int id = 0; // change
         int row = userService.deleteItemFromCart(id);
         System.out.println(row);
         return JsonData.buildSuccess(row);
     }
 
+    /**
+     * add item to current user's cart
+     * localhost:8080/pri/cart/add_to_cart
+     * format:
+     * {
+     *     "userId":1,
+     *     "productId":5
+     * }
+     * @param cart
+     * @return
+     */
     @PostMapping("add_to_cart")
     public JsonData addToCart(@RequestBody Cart cart) {
 
