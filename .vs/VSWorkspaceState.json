@@ -1,7 +1,9 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\web",
+    "\\web\\ReactFetchJson"
   ],
-  "SelectedNode": "\\E:\\Github\\bestsell",
+  "SelectedNode": "\\web\\ReactFetchJson\\ReactFetchJson.sln",
   "PreviewInSolutionExplorer": false
 }
