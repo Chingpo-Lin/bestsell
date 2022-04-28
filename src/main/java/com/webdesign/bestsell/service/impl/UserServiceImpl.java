@@ -5,6 +5,7 @@ import com.webdesign.bestsell.dao.OrderDao;
 import com.webdesign.bestsell.dao.UserDao;
 import com.webdesign.bestsell.domain.Cart;
 import com.webdesign.bestsell.domain.Order;
+import com.webdesign.bestsell.domain.Product;
 import com.webdesign.bestsell.domain.User;
 import com.webdesign.bestsell.service.UserService;
 import org.apache.ibatis.io.Resources;
@@ -15,18 +16,13 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class UserServiceImpl implements UserService {
 
     private static final String resource = "config/mybatis-config.xml";
     private SqlSessionFactory sqlSessionFactory;
-
-    public static Map<String, User> sessionMap = new HashMap<>();
 
     public UserServiceImpl() throws IOException {
 
@@ -61,8 +57,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String login(String phone, String pwd) {
-
+    public boolean login(String phone, String pwd) {
         try (SqlSession sqlSession = sqlSessionFactory.openSession()) {
             UserDao userDao = sqlSession.getMapper(UserDao.class);
 
@@ -70,17 +65,14 @@ public class UserServiceImpl implements UserService {
             System.out.println(user == null);
             System.out.println(phone);
             if (user != null) {
-                String token = UUID.randomUUID().toString();
-                System.out.println(token);
-                sessionMap.put(token, user);
-                return token;
+                return true;
             } else {
-                return null;
+                return false;
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
+        return false;
     }
 
     @Override

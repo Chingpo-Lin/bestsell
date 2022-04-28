@@ -2,6 +2,7 @@ package com.webdesign.bestsell.service;
 
 import com.webdesign.bestsell.domain.Cart;
 import com.webdesign.bestsell.domain.Order;
+import com.webdesign.bestsell.domain.Product;
 import com.webdesign.bestsell.domain.User;
 
 import java.util.List;
@@ -12,7 +13,7 @@ public interface UserService {
 
     int signup(User user);
 
-    String login(String phone, String pwd);
+    boolean login(String phone, String pwd);
 
     List<Cart> getCartByUserId(int userId);
 

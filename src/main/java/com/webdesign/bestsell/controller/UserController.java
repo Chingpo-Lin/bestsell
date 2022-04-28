@@ -8,12 +8,16 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
+import java.util.UUID;
+import javax.servlet.http.Cookie;
 
 @RestController
 @RequestMapping("/pub/user")
 public class UserController {
-
+    static final int FIVE_DAYS = 43200;
     @Autowired
     public UserService userService;
 
@@ -34,9 +38,44 @@ public class UserController {
     }
 
     @PostMapping("login")
-    public JsonData login(@RequestBody User user) {
+    public JsonData login(@RequestBody User user, HttpServletRequest request, HttpServletResponse response) {
 
-        String token = userService.login(user.getPhone(), user.getPwd());
-        return token != null ? JsonData.buildSuccess(token): JsonData.buildError("error of phone or pwd");
+        boolean ifLogin = userService.login(user.getPhone(), user.getPwd());
+        if (ifLogin) {
+            String sessionID = UUID.randomUUID().toString();
+            request.getSession().setAttribute(sessionID, user);
+            Cookie cookie = new Cookie("sessionId", sessionID);
+            cookie.setMaxAge(FIVE_DAYS);
+            response.addCookie(cookie);
+            return JsonData.buildSuccess("Logged in");
+        }
+
+        return JsonData.buildError("Password or username invalid");
+    }
+
+    @GetMapping("log_out")
+    public JsonData logout(HttpServletRequest request) {
+        String sessionId = "Default";
+        Cookie [] cookies = request.getCookies();
+        if (cookies == null) {
+            System.out.println("No Cookies");
+            return JsonData.buildSuccess("Logged out");
+        }
+
+        for (Cookie cookie: cookies) {
+            if (cookie.getName().equals("sessionId")) {
+                sessionId = cookie.getValue();
+                break;
+            }
+        }
+
+        if (sessionId.equals("Default")) {
+            System.out.println("cannot find sessionId");
+        }
+        else {
+            request.getSession().removeAttribute(sessionId);
+        }
+
+        return JsonData.buildSuccess("Logged out");
     }
 }
