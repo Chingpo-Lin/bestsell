@@ -26,6 +26,7 @@ public class LoginInterceptor implements HandlerInterceptor {
         // TODO
         // check if user in session
 
+
         System.out.println("enter interceptor part");
         if (!login) {
             sendJsonMessage(response, JsonData.buildError("please log in first"));
