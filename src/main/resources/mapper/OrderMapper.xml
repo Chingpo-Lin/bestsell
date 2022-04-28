@@ -18,7 +18,7 @@
         select * from `order` where user_id = #{userId,jdbcType=INTEGER}
     </select>
 
-    <insert id="placeOrder" parameterType="Order">
+    <insert id="placeOrder" parameterType="Order" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
 
         INSERT INTO `order` (`user_id`, `product_id`, `create_time`)
         VALUES (#{userId,jdbcType=INTEGER}, #{productId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP});
