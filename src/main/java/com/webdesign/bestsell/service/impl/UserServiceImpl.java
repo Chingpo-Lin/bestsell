@@ -7,15 +7,9 @@ import com.webdesign.bestsell.domain.Cart;
 import com.webdesign.bestsell.domain.Order;
 import com.webdesign.bestsell.domain.User;
 import com.webdesign.bestsell.service.UserService;
-import org.apache.ibatis.io.Resources;
-import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
-import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

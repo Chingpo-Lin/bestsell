@@ -3,6 +3,7 @@ package com.webdesign.bestsell.utils;
 
 public class JsonData {
 
+    // <0: fail    >= 0 success
     private int code;
 
     private Object data;
