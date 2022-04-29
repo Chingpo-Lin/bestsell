@@ -1,0 +1,116 @@
+{
+    "code": 0,
+    "products": [
+        {
+            "id": 1,
+            "userId": 1,
+            "price": 23.0,
+            "img": "/images/dress1.jpg",
+            "description": "fdfsdf",
+            "createDate": "2022-04-18 08:00:00",
+            "stock": 0,
+            "name": "book",
+            "categoryId": 2
+        },
+        {
+            "id": 2,
+            "userId": 1,
+            "price": 24.0,
+            "img": "/images/dress2.jpg",
+            "description": "nd",
+            "createDate": "2022-04-18 08:00:00",
+            "stock": 0,
+            "name": "bok",
+            "categoryId": 2
+        },
+        {
+            "id": 3,
+            "userId": 1,
+            "price": 26.2,
+            "img": "/images/dress3.jpg",
+            "description": "jjs",
+            "createDate": "2022-04-18 08:00:00",
+            "stock": 0,
+            "name": "bokk",
+            "categoryId": 2
+        },
+        {
+            "id": 12,
+            "userId": 1,
+            "price": 39.5,
+            "img": "/images/dress4.jpg",
+            "description": "efe,lasdlxxf",
+            "createDate": null,
+            "stock": 0,
+            "name": "cccsss",
+            "categoryId": 1
+        },
+        {
+            "id": 4,
+            "userId": 1,
+            "price": 2.3,
+            "img": "/images/dress5.jpg",
+            "description": "SDAS",
+            "createDate": null,
+            "stock": 2,
+            "name": "BOOKK",
+            "categoryId": 2
+        },
+        {
+            "id": 5,
+            "userId": 777,
+            "price": 7.7,
+            "img": "image",
+            "description": "This is a test",
+            "createDate": "2022-04-20 03:38:19",
+            "stock": 6,
+            "name": "Test",
+            "categoryId": 7
+        },
+        {
+            "id": 6,
+            "userId": 1,
+            "price": 29.52,
+            "img": "asdads",
+            "description": "efefqf",
+            "createDate": null,
+            "stock": 2,
+            "name": "bokkkx1",
+            "categoryId": 2
+        },
+        {
+            "id": 7,
+            "userId": 2,
+            "price": 32.5,
+            "img": "asdasdadss",
+            "description": "efefqxxf",
+            "createDate": null,
+            "stock": 5,
+            "name": "booksss",
+            "categoryId": 2
+        },
+        {
+            "id": 8,
+            "userId": 777,
+            "price": 7.7,
+            "img": "image",
+            "description": "This is a test",
+            "createDate": "2022-04-21 05:14:06",
+            "stock": 7,
+            "name": "Test",
+            "categoryId": 7
+        },
+        {
+            "id": 11,
+            "userId": 1,
+            "price": 39.5,
+            "img": "assdadss",
+            "description": "efe,llxxf",
+            "createDate": null,
+            "stock": 0,
+            "name": "cccsss",
+            "categoryId": 1
+        }
+    ],
+    "msg": null
+}
