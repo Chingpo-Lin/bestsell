@@ -46,6 +46,7 @@ header a {
 main{
   grid-area: main;
 }
+
 footer{
   grid-area: footer;
   background-color: #203040;
@@ -53,4 +54,19 @@ footer{
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.content{
+  display: flex;
+  flex-wrap: wrap;
+
+}
+
+.main{
+  flex: 3 60rem;
+
+}
+
+.sidebar{
+  flex: 1 20rem;
 }
