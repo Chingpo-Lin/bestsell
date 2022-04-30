@@ -6,7 +6,7 @@ export default class Products extends Component {
     return (
       <div>
         <ul className="products">
-            {this.props.products.map((product) => (
+            {this.props.products.map(product => (
                 <li key={product.id}>
                     <div className="product">
                         <a href={"#" + product.id}>
