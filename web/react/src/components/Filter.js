@@ -16,12 +16,12 @@ export default class Filter extends Component {
             Filter{" "}
             <select value={this.props.size} onChange={this.props.filterProducts}>
               <option value="">All</option>
-              <option value="0">0</option>
-              <option value="1">1</option>
-              <option value="2">2</option> 
-              <option value="3">3</option> 
-              <option value="4">4</option>
-              <option value="6">6</option>              
+              <option value="XS">XS</option>
+              <option value="S">S</option>
+              <option value="M">M</option> 
+              <option value="L">L</option> 
+              <option value="XL">XL</option>
+              <option value="XXL">XXL</option>              
             </select>              
           </div>
       </div>

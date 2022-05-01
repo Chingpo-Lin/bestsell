@@ -9,6 +9,7 @@
             "description": "fdfsdf",
             "createDate": "2022-04-18 08:00:00",
             "stock": 0,
+            "availableSizes": ["X", "L", "XL", "XXL"],
             "name": "book",
             "categoryId": 2
         },
@@ -20,6 +21,7 @@
             "description": "nd",
             "createDate": "2022-04-18 08:00:00",
             "stock": 0,
+            "availableSizes": ["X", "M", "L"],
             "name": "bok",
             "categoryId": 2
         },
@@ -31,6 +33,7 @@
             "description": "jjs",
             "createDate": "2022-04-18 08:00:00",
             "stock": 0,
+            "availableSizes": ["X", "M", "L"],
             "name": "bokk",
             "categoryId": 2
         },
@@ -42,6 +45,7 @@
             "description": "efe,lasdlxxf",
             "createDate": null,
             "stock": 0,
+            "availableSizes": ["XL"],
             "name": "cccsss",
             "categoryId": 1
         },
@@ -53,6 +57,7 @@
             "description": "SDAS",
             "createDate": null,
             "stock": 2,
+            "availableSizes": ["X", "L", "XL"],
             "name": "BOOKK",
             "categoryId": 2
         },
@@ -64,6 +69,7 @@
             "description": "This is a test",
             "createDate": "2022-04-20 03:38:19",
             "stock": 6,
+            "availableSizes": ["XL", "XXL"],
             "name": "Test",
             "categoryId": 7
         },
@@ -75,6 +81,7 @@
             "description": "efefqf",
             "createDate": null,
             "stock": 2,
+            "availableSizes": ["S", "XS"],
             "name": "bokkkx1",
             "categoryId": 2
         },
@@ -86,6 +93,7 @@
             "description": "efefqxxf",
             "createDate": null,
             "stock": 5,
+            "availableSizes": ["S", "M"],
             "name": "booksss",
             "categoryId": 2
         },
@@ -97,6 +105,7 @@
             "description": "This is a test",
             "createDate": "2022-04-21 05:14:06",
             "stock": 7,
+            "availableSizes": ["XL", "XXL"],
             "name": "Test",
             "categoryId": 7
         },
@@ -108,6 +117,7 @@
             "description": "efe,llxxf",
             "createDate": null,
             "stock": 0,
+            "availableSizes": ["L"],
             "name": "cccsss",
             "categoryId": 1
         }
