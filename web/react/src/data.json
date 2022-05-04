@@ -5,7 +5,7 @@
             "id": 1,
             "userId": 1,
             "price": 23.0,
-            "img": "/images/dress1.jpg",
+            "img": "./images/dress1.jpg",
             "description": "fdfsdf",
             "createDate": "2022-04-18 08:00:00",
             "stock": 0,
