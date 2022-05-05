@@ -6,15 +6,20 @@ import Filter from './components/Filter';
 import Cart from './components/Cart';
 
 export default class App extends React.Component {
-
+  //create several attributes of state in a constructor
   constructor(){
     super();
     this.state = {
       products:data.products,
-      cartItems: [],
+      cartItems: localStorage.getItem("cartItems")?
+        JSON.parse(localStorage.getItem("cartItems")):[],
       size:"",
       sort:"",
     };
+  }
+
+  createOrder = (order) => {
+    alert("Need to save order for " + order.name);
   }
 
   removeFromCart = (product) =>{
@@ -22,7 +27,7 @@ export default class App extends React.Component {
     this.setState({
       cartItems:cartItems.filter(x=>x.id !== product.id)
     })
-    
+    localStorage.setItem("cartItems", JSON.stringify(cartItems.filter(x=>x.id !== product.id)));
   }
 
   addToCart = (product) => {
@@ -37,11 +42,12 @@ export default class App extends React.Component {
     if (!alreadyInCart){
       cartItems.push({...product, count: 1});
     }
-    this.setState({cartItems});
+    this.setState({ cartItems });
+    localStorage.setItem("cartItems", JSON.stringify(cartItems));
   }
 
+  //sort products in order of latest, lowest and highest
   sortProducts = (event) => {
-    //implement
     const sort = event.target.value;
     console.log(event.target.value);
     this.setState(state => ({
@@ -55,8 +61,9 @@ export default class App extends React.Component {
       ))
     }))
   };
+
+  //filter products in order of sizes
   filterProducts = (event) => {
-    //implement
     console.log(event.target.value);
     if(event.target.value === ""){
       this.setState({size: event.target.value, products:data.products});
@@ -90,7 +97,9 @@ export default class App extends React.Component {
               <div className="sidebar">
                 <Cart 
                   cartItems={this.state.cartItems}
-                  removeFromCart={this.removeFromCart}/>
+                  removeFromCart={this.removeFromCart}
+                  createOrder={this.createOrder}
+                  />
               </div>
             </div> 
           </main>

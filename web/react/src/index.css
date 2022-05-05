@@ -147,7 +147,7 @@ footer{
   flex: 1;
 }
 
-/* Index.css */
+/* cart */
 .cart{
   padding: 1rem;
   margin: 1rem;
@@ -188,4 +188,23 @@ footer{
 .total >div,
 .total > button{
   flex: 1;
+}
+
+/* Checkout form */
+form{
+  width: 100%;
+}
+.form-container{
+  width: 100%;
+  padding: 0;
+  list-style-type: none;
+}
+.form-container li{
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+}
+input{
+  padding: 1rem;
+  border: .1rem #c0c0c0 solid;
 }
