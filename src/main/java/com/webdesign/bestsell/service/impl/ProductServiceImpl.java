@@ -1,9 +1,11 @@
 package com.webdesign.bestsell.service.impl;
 
 import com.webdesign.bestsell.dao.CategoryDao;
+import com.webdesign.bestsell.dao.PicturesDao;
 import com.webdesign.bestsell.dao.ProductDao;
 import com.webdesign.bestsell.dao.UserDao;
 import com.webdesign.bestsell.domain.Category;
+import com.webdesign.bestsell.domain.Picture;
 import com.webdesign.bestsell.domain.Product;
 import com.webdesign.bestsell.domain.User;
 import com.webdesign.bestsell.service.ProductService;
@@ -25,7 +27,6 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private ProductDao productDao;
-
     @Autowired
     private CategoryDao categoryDao;
 
