@@ -42,17 +42,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String login(String phone, String pwd) {
+    public boolean login(String phone, String pwd) {
         User user = userDao.login(phone, pwd);
         System.out.println(user == null);
         System.out.println(phone);
         if (user != null) {
-            String token = UUID.randomUUID().toString();
-            System.out.println(token);
-            sessionMap.put(token, user);
-            return token;
+            return true;
         } else {
-            return null;
+            return false;
         }
     }
 

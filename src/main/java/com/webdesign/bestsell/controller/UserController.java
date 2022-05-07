@@ -1,28 +1,31 @@
 package com.webdesign.bestsell.controller;
-
-import com.webdesign.bestsell.domain.Cart;
 import com.webdesign.bestsell.domain.Product;
 import com.webdesign.bestsell.domain.User;
+import com.webdesign.bestsell.service.FirebaseStorageService;
 import com.webdesign.bestsell.service.ProductService;
 import com.webdesign.bestsell.service.UserService;
 import com.webdesign.bestsell.utils.JsonData;
 import com.webdesign.bestsell.utils.MD5Utils;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Date;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/pri/user")
 public class UserController {
-
+    static final int FIVE_DAYS = 43200;
     @Autowired
     public UserService userService;
-
     @Autowired
     public ProductService productService;
+    @Autowired
+    public FirebaseStorageService pictureService;
 
     /**
      * sign up user
@@ -45,28 +48,57 @@ public class UserController {
     }
 
     /**
-     * list user
-     * localhost:8080/pri/user/list_user
-     * @return
-     */
-    @GetMapping("list_user")
-    public JsonData listUser() {
-
-        List<User> userList = userService.listUser();
-        System.out.println(userList);
-        return JsonData.buildSuccess(userList);
-    }
-
-    /**
      * login user
      * localhost:8080/pri/user/login
      * @param user
      * @return
      */
     @PostMapping("login")
-    public JsonData login(@RequestBody User user) {
-        String token = userService.login(user.getPhone(), MD5Utils.MD5(user.getPwd()));
-        return token != null ? JsonData.buildSuccess(token): JsonData.buildError("error of phone or pwd");
+    public JsonData login(@RequestBody User user, HttpServletRequest request, HttpServletResponse response) {
+        String crypPassword = MD5Utils.MD5(user.getPwd());
+        boolean ifLogin = userService.login(user.getPhone(),  crypPassword);
+        if (ifLogin) {
+            String sessionID = UUID.randomUUID().toString();
+            request.getSession().setAttribute(sessionID, user);
+            Cookie cookie = new Cookie("sessionId", sessionID);
+            cookie.setMaxAge(FIVE_DAYS);
+            response.addCookie(cookie);
+            return JsonData.buildSuccess("Logged in + cookie: " + cookie.getValue().toString());
+        }
+
+        return JsonData.buildError("Password or username invalid");
+    }
+
+    @GetMapping("logout")
+    public JsonData logout(HttpServletRequest request) {
+        String sessionId = "Default";
+        Cookie [] cookies = request.getCookies();
+        if (cookies == null) {
+            System.out.println("No Cookies");
+            return JsonData.buildSuccess("Logged out: No cookies");
+        }
+
+        for (Cookie cookie: cookies) {
+            if (cookie.getName().equals("sessionId")) {
+                System.out.println("log out: found session id in cookie:" +  cookie.getValue());
+                sessionId = cookie.getValue();
+                break;
+            }
+        }
+
+        if (sessionId.equals("Default")) {
+            return JsonData.buildSuccess("cannot find sessionId in cookies");
+        }
+
+        User user = (User)request.getSession().getAttribute(sessionId);
+        if (user != null) {
+            String userName = user.getName();
+            request.getSession().removeAttribute(sessionId);
+            return JsonData.buildSuccess(userName + ", you are Logged out, seesion id removed");
+        }
+        else {
+            return JsonData.buildSuccess("seesion id not found");
+        }
     }
 
     /**
@@ -82,16 +114,24 @@ public class UserController {
      *     "name":"cccsss",
      *     "categoryId":1
      * }
-     * @param product
+     *
      * @return
      */
     @PostMapping("sell_product")
-    public JsonData sellProduct(@RequestBody Product product) {
-//        Product product = new Product(777, 7.7, "image", "This is a test", 7, "Test", 7);
-        product.setCreateDate(new Date());
-        int row = productService.sell(product);
+    public JsonData sellProduct(@RequestParam("file") MultipartFile [] files) {
+        String downloadURL = null;
 
-        return row > 0 ? JsonData.buildSuccess(product.getName()): JsonData.buildError("cannot sell");
+        for (MultipartFile file : files) {
+            try {
+                downloadURL = pictureService.upload(file);
+
+                System.out.println(downloadURL);
+            } catch (Exception e) {
+                return JsonData.buildSuccess(downloadURL);
+            }
+        }
+
+        return JsonData.buildSuccess("success uploaded, URL:  " + downloadURL);
     }
 
     /**
@@ -108,5 +148,18 @@ public class UserController {
         List<Product> productList = productService.getProductByUserId(uid);
         System.out.println(productList);
         return JsonData.buildSuccess(productList);
+    }
+
+    /**
+     * list user
+     * localhost:8080/pri/user/list_user
+     * @return
+     */
+    @GetMapping("list_user")
+    public JsonData listUser() {
+
+        List<User> userList = userService.listUser();
+        System.out.println(userList);
+        return JsonData.buildSuccess(userList);
     }
 }

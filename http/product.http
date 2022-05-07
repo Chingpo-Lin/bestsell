@@ -1,1 +1,1 @@
-POST localhost:8080/bestsell/pub/product/list_all_product
+POST localhost:8082/pri/user/sell_product
