@@ -1,0 +1,1 @@
+export const FETCH_PRODUCTS = "FRTCH_PRODUCTS";
