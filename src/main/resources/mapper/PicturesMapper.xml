@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.webdesign.bestsell.dao.PicturesDao">
+
+    <resultMap id="PicturesResultMap" type="Picture">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="product_id" property="productId" jdbcType="INTEGER"/>
+        <result column="picture_url" property="pictureURL" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <insert id="addPicture" parameterType="Picture">
+        INSERT INTO `pictures` (`product_id`, `picture_url`)
+        VALUES (#{productId,jdbcType=INTEGER}, #{pictureURL,jdbcType=VARCHAR});
+
+    </insert>
+
+    <select id="getPicturesByProductId" resultMap="PicturesResultMap">
+        select * from pictures where product_id = #{productId,jdbcType=INTEGER}
+    </select>
+
+    <delete id="deletePicturesByProductId" parameterType="int">
+        delete from pictures where id = #{productId,jdbcType=INTEGER}
+    </delete>
+
+    <delete id="deletePictureByPictureId" parameterType="int">
+        delete from pictures where id = #{id,jdbcType=INTEGER}
+    </delete>
+
+
+</mapper>

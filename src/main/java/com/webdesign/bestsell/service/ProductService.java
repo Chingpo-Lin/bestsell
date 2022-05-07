@@ -1,6 +1,7 @@
 package com.webdesign.bestsell.service;
 
 import com.webdesign.bestsell.domain.Category;
+import com.webdesign.bestsell.domain.Picture;
 import com.webdesign.bestsell.domain.Product;
 
 import java.util.List;
