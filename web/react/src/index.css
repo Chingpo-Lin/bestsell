@@ -148,6 +148,14 @@ footer{
 }
 
 /* cart */
+.cart-icon{
+  text-align: center;
+    display: block;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    width: 100%;
+}
 .cart{
   padding: 1rem;
   margin: 1rem;

@@ -1,4 +1,4 @@
 
 global.AppConfig = {
-    serverIp:'localhost:8080'
+    serverIp:'http://localhost:8080'
 }

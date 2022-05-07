@@ -41,6 +41,10 @@ export default class Cart extends Component {
             </div>
         )}
         <div>
+          <div className='cart-icon'>
+          <img src='./images/cart_icon.png' 
+               alt=" " width={"150px"}/>
+          </div>
           <div className="cart">
             <Fade left cascade>
               <ul className="cart-items">
