@@ -2,6 +2,7 @@ package com.webdesign.bestsell.controller;
 import com.webdesign.bestsell.domain.Product;
 import com.webdesign.bestsell.domain.User;
 import com.webdesign.bestsell.service.FirebaseStorageService;
+import com.webdesign.bestsell.service.PictureService;
 import com.webdesign.bestsell.service.ProductService;
 import com.webdesign.bestsell.service.UserService;
 import com.webdesign.bestsell.utils.JsonData;
@@ -13,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -27,7 +29,9 @@ public class UserController {
     @Autowired
     public ProductService productService;
     @Autowired
-    public FirebaseStorageService pictureService;
+    public FirebaseStorageService FirebaseService;
+    @Autowired
+    public PictureService pictureService;
 
     /**
      * sign up user
@@ -107,7 +111,7 @@ public class UserController {
      * sell product
      * localhost:8080/pri/user/sell_product
      * post format:
-     * {
+     * product:  {
      *     "userId":1,
      *     "price":39.5,
      *     "img":"assssdadss",
@@ -116,22 +120,23 @@ public class UserController {
      *     "name":"cccsss",
      *     "categoryId":1
      * }
-     *
+     *  file: list of files selected
      * @return
      */
     @PostMapping("sell_product")
-    public JsonData sellProduct(@RequestParam("file") MultipartFile [] files) {
+    public JsonData sellProduct(@RequestPart("product") Product product, @RequestParam("file") MultipartFile [] files) {
         String downloadURL = null;
-
         for (MultipartFile file : files) {
             try {
-                downloadURL = pictureService.upload(file);
-
-                System.out.println(downloadURL);
+                downloadURL = FirebaseService.upload(file);
+                pictureService.addPicture(product.getId(), downloadURL);
             } catch (Exception e) {
-                return JsonData.buildSuccess(downloadURL);
+                return JsonData.buildError("Error occur");
             }
         }
+
+        product.setCreateDate(new Date());
+        int row = productService.sell(product);
 
         return JsonData.buildSuccess("success uploaded, URL:  " + downloadURL);
     }

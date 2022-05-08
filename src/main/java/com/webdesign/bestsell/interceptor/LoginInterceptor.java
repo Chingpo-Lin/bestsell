@@ -5,6 +5,7 @@ import com.webdesign.bestsell.utils.JsonData;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
@@ -25,7 +26,24 @@ public class LoginInterceptor implements HandlerInterceptor {
         boolean login = true;
         // TODO
         // check if user in session
+        String sessionId = "Default";
+        Cookie[] cookies = request.getCookies();
+        if (cookies == null) {
+            System.out.println("Intercepter: No Cookies");
+            login = false;
+        }
 
+        for (Cookie cookie: cookies) {
+            if (cookie.getName().equals("sessionId")) {
+                System.out.println("log out: found session id in cookie:" +  cookie.getValue());
+                sessionId = cookie.getValue();
+                break;
+            }
+        }
+
+        if (sessionId.equals("Default")) {
+            login = false;
+        }
 
         System.out.println("enter interceptor part");
         if (!login) {
