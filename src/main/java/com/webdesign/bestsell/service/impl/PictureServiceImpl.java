@@ -6,10 +6,12 @@ import com.webdesign.bestsell.dao.ProductDao;
 import com.webdesign.bestsell.domain.Picture;
 import com.webdesign.bestsell.service.PictureService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
 
+@Service
 public class PictureServiceImpl implements PictureService {
     @Autowired
     private PicturesDao picturesDao;

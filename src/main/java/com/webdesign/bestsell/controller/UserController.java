@@ -2,6 +2,7 @@ package com.webdesign.bestsell.controller;
 import com.webdesign.bestsell.domain.Product;
 import com.webdesign.bestsell.domain.User;
 import com.webdesign.bestsell.service.FirebaseStorageService;
+import com.webdesign.bestsell.service.PictureService;
 import com.webdesign.bestsell.service.ProductService;
 import com.webdesign.bestsell.service.UserService;
 import com.webdesign.bestsell.utils.JsonData;
@@ -26,7 +27,9 @@ public class UserController {
     @Autowired
     public ProductService productService;
     @Autowired
-    public FirebaseStorageService pictureService;
+    public FirebaseStorageService FirebaseService;
+    @Autowired
+    public PictureService pictureService;
 
     /**
      * sign up user
@@ -123,8 +126,8 @@ public class UserController {
         String downloadURL = null;
         for (MultipartFile file : files) {
             try {
-                downloadURL = pictureService.upload(file);
-                System.out.println(downloadURL);
+                downloadURL = FirebaseService.upload(file);
+                pictureService.addPicture(product.getId(), downloadURL);
             } catch (Exception e) {
                 return JsonData.buildError("Error occur");
             }
