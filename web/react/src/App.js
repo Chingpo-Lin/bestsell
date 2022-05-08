@@ -1,21 +1,51 @@
 import './App.css';
 import React from "react";
-import data from "./data.json";
 import Products from "./components/Products";
 import Filter from './components/Filter';
 import Cart from './components/Cart';
+import './config/config.js';
+import axios from 'axios';
 
 export default class App extends React.Component {
   //create several attributes of state in a constructor
   constructor(){
     super();
     this.state = {
-      products:data.products,
+      products:[],
       cartItems: localStorage.getItem("cartItems")?
         JSON.parse(localStorage.getItem("cartItems")):[],
       size:"",
       sort:"",
+      isLoggedIn: false,
+      user:{},
+      token: ""
     };
+  }
+
+  componentDidMount() {
+    let api = global.AppConfig.serverIp + "/pub/product/list_all_product"
+    axios.get(api)
+        .then((response) => {
+
+            let tempData = response.data
+            console.log(tempData);
+            this.setState({
+              products:tempData.data
+            })
+        })
+        .catch(function (error) {
+            console.log(error);
+        })
+  }
+
+  handleSuccessfulAuth = (responsedata) => {
+    // sessionStorage.setItem('token', JSON.stringify(userToken));
+    console.log(responsedata)
+    window.sessionStorage.setItem("token", responsedata.token);
+    this.setState({
+      isLoggedIn: true,
+      user: responsedata.user
+    });
   }
 
   createOrder = (order) => {
@@ -66,11 +96,11 @@ export default class App extends React.Component {
   filterProducts = (event) => {
     console.log(event.target.value);
     if(event.target.value === ""){
-      this.setState({size: event.target.value, products:data.products});
+      this.setState({size: event.target.value, products:this.state.products});
     } else{
       this.setState ({
         size: event.target.value,
-        products: data.products.filter( // filter array
+          products: this.state.products.filter( // filter array
           (product) => product.availableSizes.indexOf(event.target.value) >= 0
           ),
       });
@@ -82,6 +112,7 @@ export default class App extends React.Component {
       <div className="grid-container">
          <header>
             <a href="/">React Shopping Cart</a>
+            <a href={global.AppConfig.webIp+"/login"}><button>{this.state.isLoggedIn ? "logout" : "login"}</button></a>
           </header>
           <main> 
             <div className="content">
@@ -92,7 +123,8 @@ export default class App extends React.Component {
                   filterProducts={this.filterProducts}
                   sortProducts={this.sortProducts} />
                 <Products products={this.state.products} 
-                          addToCart={this.addToCart} />
+                          addToCart={this.addToCart}
+                          isLoggedIn={this.state.isLoggedIn} />
               </div>
               <div className="sidebar">
                 <Cart 

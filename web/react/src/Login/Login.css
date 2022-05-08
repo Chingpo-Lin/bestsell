@@ -1,0 +1,23 @@
+#outer {
+    width:100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height:60vh;  
+}
+
+.login-wrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+.has-text-danger{
+    color: red;
+}
+
+#submit {
+    width:100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 25px;
+}

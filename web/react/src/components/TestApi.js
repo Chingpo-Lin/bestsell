@@ -13,14 +13,14 @@ class Welcome extends React.Component {
         super(props);
 
         this.state = {
-            welcome_list:''
+            welcome_list:[]
         };
     }
 
     componentDidMount() {
-        let api = global.AppConfig. serverIp + "/pub/product/list_all_product"
+        let api = global.AppConfig.serverIp + "/pub/product/list_all_product"
 
-        const axios = require('axios');
+        // const axios = require('axios');
 
         axios.get(api)
             .then((response) => {
@@ -38,6 +38,7 @@ class Welcome extends React.Component {
     }
 
     render() {
+        console.log(this.state.welcome_list);
         return (
           <div>welcome to{this.state.welcome_list}</div>
         );

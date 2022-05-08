@@ -38,10 +38,10 @@ export default class Products extends Component {
                         </a>
                         <div className="product-price">
                             <div>{formatCurrency(product.price)}</div>
-                            <button onClick={()=> this.props.addToCart(product)}
-                             className="button primary">
-                                Add to Cart
-                            </button>
+                            {this.props.isLoggedIn ? (
+                              <button onClick={()=> this.props.addToCart(product)} className="button primary">Add to Cart</button>
+                            ) : (<a href={global.AppConfig.webIp+"/login"}><button className="button primary">Add to Cart</button></a>
+                            )}
                         </div>
                     </div>
                 </li>
