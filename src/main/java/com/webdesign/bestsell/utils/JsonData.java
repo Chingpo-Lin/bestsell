@@ -31,7 +31,7 @@ public class JsonData {
         return new JsonData(-1, "", msg);
     }
 
-    public static JsonData buildError(String msg, int code) {
+    public static JsonData buildError(int code, String msg) {
         return new JsonData(code, "", msg);
     }
 
