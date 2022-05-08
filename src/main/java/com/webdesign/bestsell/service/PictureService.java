@@ -8,5 +8,5 @@ public interface PictureService {
     public boolean addPicture(int productId, String pictureURL);
     public boolean deletePicture(int pictureID);
     public boolean deleteAllPicturesOfaProduct(int productID);
-    public List<Picture> showAProductPictures();
+    public List<Picture> showAProductPictures(int productID);
 }

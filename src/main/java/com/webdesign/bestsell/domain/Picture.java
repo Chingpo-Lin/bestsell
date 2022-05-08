@@ -1,23 +1,23 @@
 package com.webdesign.bestsell.domain;
 
 public class Picture {
-    private Integer id;
+    private String id;
 
     private int productId;
 
     private String pictureURL;
 
-    public Picture(Integer id, int productId, String pictureURL) {
+    public Picture(String id, int productId, String pictureURL) {
         this.id = id;
         this.productId = productId;
         this.pictureURL = pictureURL;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -40,7 +40,7 @@ public class Picture {
     @Override
     public String toString() {
         return "Picture{" +
-                "id=" + id +
+                "id='" + id + '\'' +
                 ", productId=" + productId +
                 ", pictureURL='" + pictureURL + '\'' +
                 '}';
