@@ -5,6 +5,7 @@ import Filter from './components/Filter';
 import Cart from './components/Cart';
 import './config/config.js';
 import axios from 'axios';
+import { Navigate } from "react-router-dom"
 
 export default class App extends React.Component {
   //create several attributes of state in a constructor
@@ -18,7 +19,8 @@ export default class App extends React.Component {
       sort:"",
       isLoggedIn: false,
       user:{},
-      token: ""
+      token: "",
+      redirectToLogin: false
     };
   }
 
@@ -44,7 +46,8 @@ export default class App extends React.Component {
     window.sessionStorage.setItem("token", responsedata.token);
     this.setState({
       isLoggedIn: true,
-      user: responsedata.user
+      user: responsedata.user,
+      redirectToLogin: false
     });
   }
 
@@ -61,19 +64,24 @@ export default class App extends React.Component {
   }
 
   addToCart = (product) => {
-    const cartItems = this.state.cartItems.slice();
-    let alreadyInCart = false;
-    cartItems.forEach(item => {
-      if (item.id === product.id){
-        item.count++;
-        alreadyInCart = true;
-      }
-    });
-    if (!alreadyInCart){
-      cartItems.push({...product, count: 1});
+    if(!this.state.isLoggedIn){
+        this.setState({redirectToLogin:true}); //this will open login page on click of login button
     }
-    this.setState({ cartItems });
-    localStorage.setItem("cartItems", JSON.stringify(cartItems));
+    else{
+      const cartItems = this.state.cartItems.slice();
+      let alreadyInCart = false;
+      cartItems.forEach(item => {
+        if (item.id === product.id){
+          item.count++;
+          alreadyInCart = true;
+        }
+      });
+      if (!alreadyInCart){
+        cartItems.push({...product, count: 1});
+      }
+      this.setState({ cartItems });
+      localStorage.setItem("cartItems", JSON.stringify(cartItems));
+    }
   }
 
   //sort products in order of latest, lowest and highest
@@ -108,6 +116,9 @@ export default class App extends React.Component {
   };
 
   render(){
+    if(this.state.redirectToLogin){
+      return <Navigate to='/login'/>;
+    }
     return (
       <div className="grid-container">
          <header>
