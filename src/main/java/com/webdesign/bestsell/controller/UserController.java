@@ -19,7 +19,9 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/pri/user")
 public class UserController {
+
     static final int FIVE_DAYS = 43200;
+
     @Autowired
     public UserService userService;
     @Autowired
