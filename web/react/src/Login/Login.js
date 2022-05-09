@@ -34,6 +34,7 @@ export default class Login extends Component{
         .then(response => {
             if (response.data.code === 0) {
                 //if login success, set cookie and redirect to homepage
+                console.log("Login_Reponse",response.data);
                 Cookies.set("react-cookie-test",response.data.data.substring(20),{expires: 1});
                 window.location.replace(global.AppConfig.webIp);
             }
@@ -42,10 +43,10 @@ export default class Login extends Component{
             }
         })
         .catch(error => {
-            console.log("login error", error);
+            console.log("login_error", error);
         });
     };
-    
+
     render(){
         return(
             <div id="outer">

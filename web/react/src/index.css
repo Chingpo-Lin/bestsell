@@ -239,3 +239,8 @@ input{
   top: 2.5rem;
   z-index: 1000;
 }
+
+.loginButton{
+  position:absolute;
+  right:20px;
+}

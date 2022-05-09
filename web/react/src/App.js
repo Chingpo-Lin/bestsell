@@ -19,8 +19,7 @@ export default class App extends React.Component {
       sort:"",
       isLoggedIn: false,
       username:"",
-      sessionId: "",
-      redirectToLogin: false
+      sessionId: ""
     };
   }
 
@@ -34,18 +33,16 @@ export default class App extends React.Component {
         sessionId: sessionId
       })
     }
-
     axios.get(api)
-        .then((response) => {
-            let tempData = response.data
-            console.log(tempData);
-            this.setState({
-              products:tempData.data
-            })
+      .then((response) => {
+        console.log("List_All_Products_Reponse",response.data);
+        this.setState({
+          products:response.data.data
         })
-        .catch(function (error) {
-            console.log(error);
-        })
+      })
+      .catch(function (error) {
+        console.log("List_All_Products_Error",error);
+      })
   }
 
   createOrder = (order) => {
@@ -116,11 +113,19 @@ export default class App extends React.Component {
   //handle login & logout button
   handleAuthButton  = () => {
     if(this.state.isLoggedIn){
-      Cookies.remove('react-cookie-test');
-      this.setState({
-        isLoggedIn: false,
-        sessionId: ""
-      });
+      //request to logout user
+      axios.get(global.AppConfig.serverIp+"/pri/user/logout", { withCredentials: true })
+      .then((response) => {
+        console.log("Logout_Reponse",response.data);
+        Cookies.remove('react-cookie-test');
+        this.setState({
+          isLoggedIn: false,
+          sessionId: ""
+        });
+      })
+      .catch(function (error) {
+          console.log("Logout_error", error);
+      })
     }
     else{
       window.location.href=global.AppConfig.webIp+"/login";
@@ -132,7 +137,9 @@ export default class App extends React.Component {
       <div className="grid-container">
          <header>
             <a href="/">React Shopping Cart</a>
+            <div className="loginButton">
             <button onClick={this.handleAuthButton}>{this.state.isLoggedIn ? "logout" : "login"}</button>
+            </div>
           </header>
           <main> 
             <div className="content">
