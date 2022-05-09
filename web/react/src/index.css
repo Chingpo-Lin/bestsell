@@ -267,6 +267,10 @@ input{
   z-index: 1000;
 }
 
+.loginButton{
+  position:absolute;
+  right:20px;
+}
 .ReactModal__Overlay {
   z-index: 99;
   position: absolute;

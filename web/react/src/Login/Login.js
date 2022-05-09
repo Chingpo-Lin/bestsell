@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import axios from "axios";
+import Cookies from 'js-cookie';
 import './Login.css';
-// import data from "/Users/zhihaolin/Desktop/coen275/bestsell/web/react/src/data.json";
+import '../config/config.js';
 
 export default class Login extends Component{
     constructor(props){
@@ -11,42 +12,47 @@ export default class Login extends Component{
             password:""
         };
     }
+
     handleChange = e => this.setState({[e.target.name]:e.target.value, error:""});
+
+    //login handler
     login = (e) =>{
         e.preventDefault();
         const{ username, password } = this.state;
         if(!username||!password){
             return this.setState({ error: "Fill all fields!" });
         }
+        //send login request to server
         axios.post(
-            "http://localhost:8080/pri/user/login",
+            global.AppConfig.serverIp+"/pri/user/login",
             {
-                user: {
-                    username: username,
-                    password: password
-                }
+                "phone": username,
+                "pwd": password
             },
-            { withCredentials: true }
+            {withCredentials: true}
         )
         .then(response => {
-            console.log(response);
-            if (response.data.login) {
-            this.props.handleSuccessfulAuth(response.data);
+            if (response.data.code === 0) {
+                //if login success, set cookie and redirect to homepage
+                console.log("Login_Reponse",response.data);
+                Cookies.set("react-cookie-test",response.data.data.substring(20),{expires: 1});
+                window.location.replace(global.AppConfig.webIp);
             }
             else{
                 return this.setState({ error: response.data.msg });
             }
         })
         .catch(error => {
-            console.log("login error", error);
+            console.log("login_error", error);
         });
     };
+
     render(){
         return(
             <div id="outer">
-            <div className="col-md-3 login-wrapper">
+            <div className="login-wrapper">
             <h1>Please Log In</h1>
-            <form style={{ marginLeft: "0 auto" }} onSubmit = { this.login }>
+            <form onSubmit = {this.login}>
                 <label>
                 <p>Username</p>
                 <input type="text" name = "username" onChange = {this.handleChange}/>

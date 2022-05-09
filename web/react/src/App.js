@@ -1,5 +1,7 @@
 import './App.css';
 import React from "react";
+import axios from 'axios';
+import Cookies from 'js-cookie';
 import Products from "./components/Products";
 import Filter from './components/Filter';
 import './config/config.js';
@@ -18,37 +20,31 @@ export default class App extends React.Component {
       size:"",
       sort:"",
       isLoggedIn: false,
-      user:{},
-      token: "",
-      redirectToLogin: false
+      username:"",
+      sessionId: ""
     };
   }
 
+  //check session and load products from server when homepage component is mounted
   componentDidMount() {
     let api = global.AppConfig.serverIp + "/pub/product/list_all_product"
+    let sessionId = Cookies.get('react-cookie-test');
+    if(sessionId){
+      this.setState({
+        isLoggedIn: true,
+        sessionId: sessionId
+      })
+    }
     axios.get(api)
-        .then((response) => {
-
-            let tempData = response.data
-            console.log(tempData);
-            this.setState({
-              products:tempData.data
-            })
+      .then((response) => {
+        console.log("List_All_Products_Reponse",response.data);
+        this.setState({
+          products:response.data.data
         })
-        .catch(function (error) {
-            console.log(error);
-        })
-  }
-
-  handleSuccessfulAuth = (responsedata) => {
-    // sessionStorage.setItem('token', JSON.stringify(userToken));
-    console.log(responsedata)
-    window.sessionStorage.setItem("token", responsedata.token);
-    this.setState({
-      isLoggedIn: true,
-      user: responsedata.user,
-      redirectToLogin: false
-    });
+      })
+      .catch(function (error) {
+        console.log("List_All_Products_Error",error);
+      })
   }
 
   createOrder = (order) => {
@@ -64,10 +60,11 @@ export default class App extends React.Component {
   }
 
   addToCart = (product) => {
-    // if(!this.state.isLoggedIn){
-    //     this.setState({redirectToLogin:true}); //this will open login page on click of login button
-    // }
-    // else{
+    if(!this.state.isLoggedIn){
+      //this will redirect user to login page if not logged in
+      window.location.href=global.AppConfig.webIp+"/login";
+    }
+    else{
       const cartItems = this.state.cartItems.slice();
       let alreadyInCart = false;
       cartItems.forEach(item => {
@@ -81,7 +78,7 @@ export default class App extends React.Component {
       }
       this.setState({ cartItems });
       localStorage.setItem("cartItems", JSON.stringify(cartItems));
-    // }
+    }
   }
 
   //sort products in order of latest, lowest and highest
@@ -115,19 +112,36 @@ export default class App extends React.Component {
     }
   };
 
-  render(){
-    if(this.state.redirectToLogin){
-      return <Navigate to='/login'/>;
+  //handle login & logout button
+  handleAuthButton  = () => {
+    if(this.state.isLoggedIn){
+      //request to logout user
+      axios.get(global.AppConfig.serverIp+"/pri/user/logout", { withCredentials: true })
+      .then((response) => {
+        console.log("Logout_Reponse",response.data);
+        Cookies.remove('react-cookie-test');
+        this.setState({
+          isLoggedIn: false,
+          sessionId: ""
+        });
+      })
+      .catch(function (error) {
+          console.log("Logout_error", error);
+      })
     }
+    else{
+      window.location.href=global.AppConfig.webIp+"/login";
+    }
+  }
+
+  render(){
     return (
       <div className="grid-container">
          <header>
             <a href="/">React Shopping Cart</a>
-            <a href={global.AppConfig.webIp+"/login"}><button>{this.state.isLoggedIn ? "logout" : "login"}</button></a>
-            <CartModal 
-              cartItems={this.state.cartItems}
-              removeFromCart={this.removeFromCart}
-              createOrder={this.createOrder}/>
+            <div className="loginButton">
+            <button onClick={this.handleAuthButton}>{this.state.isLoggedIn ? "logout" : "login"}</button>
+            </div>
           </header>
           <main> 
             <div className="content">
@@ -141,13 +155,13 @@ export default class App extends React.Component {
                           addToCart={this.addToCart}
                           isLoggedIn={this.state.isLoggedIn} />
               </div>
-              {/* <div className="sidebar">
+              <div className="sidebar">
                 <Cart 
                   cartItems={this.state.cartItems}
                   removeFromCart={this.removeFromCart}
                   createOrder={this.createOrder}
                   />
-              </div> */}
+              </div>
             </div> 
           </main>
           <footer>All right is reserved.</footer>
