@@ -1,18 +1,21 @@
 import React, { Component } from 'react'
-import formatCurrency from '../util';
-import Fade from "react-reveal/Fade";
+import Modal from "react-modal";
+import Zoom from "react-reveal";
+import formatCurrency from '../util'
+import { Fade } from 'react-reveal';
 
-export default class Cart extends Component {
-  constructor(props){
-    super(props);
-    this.state = {
-      name:"",
-      email:"",
-      address:"",
-      showCheckout: false};
-  }
-
-  //assign the input info to the corresponding attributes
+export default class Cart2 extends Component {
+    constructor(props){
+        super(props);
+        this.state = {
+        product: null,
+        name:"",
+        email:"",
+        address:"",
+        showCheckout: false,
+        click: false};
+    }
+    //assign the input info to the corresponding attributes
   handleInput = (event) =>{
     this.setState({[event.target.name]:event.target.value });
   };
@@ -29,10 +32,22 @@ export default class Cart extends Component {
     this.props.createOrder(order);
   }
 
+    openModal = (product) => {
+        this.setState({product});
+        this.setState({click: true});
+    };
+    closeModal = () => {
+        this.setState({product: null});
+        this.setState({click: false});
+    };
+
   render() {
+      const {product} = this.state;
+      const {click} = this.state;
       const {cartItems} = this.props;
     return (
       <div>
+        <div className='cart-icon'>
         {cartItems.length === 0? ( 
             <div className="cart cart-header">Cart is empty</div>
         ) : (
@@ -40,7 +55,30 @@ export default class Cart extends Component {
                 You have {cartItems.length} items in the cart{" "}
             </div>
         )}
-        <div>
+        <button className="cart-button"
+            onClick={() => this.openModal(product)}>
+        <img src='./images/cart_icon.png' 
+            alt=" " width={"65px"}
+            />
+        </button>
+        </div>
+        {click && (
+          <Modal isOpen={true}
+          aria-labelledby="contained-modal-title-vcenter"
+            onRequestClose={this.closeModal}
+            width={"100rem"}>
+            <Zoom>
+              <button className="close-modal" onClick={this.closeModal}>
+                x
+              </button>
+              <div>
+              {cartItems.length === 0? ( 
+            <div className="cart cart-header">Cart is empty</div>
+        ) : (
+            <div className="cart cart-header">
+                You have {cartItems.length} items in the cart{" "}
+            </div>
+        )}
           <div className="cart">
             <Fade left cascade>
               <ul className="cart-items">
@@ -80,7 +118,7 @@ export default class Cart extends Component {
                     onClick={() => {
                       this.setState({showCheckout: true });
                     }}
-                    className="button primary">
+                    className="proceed button">
                       Proceed
                   </button>
               </div>
@@ -115,7 +153,7 @@ export default class Cart extends Component {
                         onChange={this.handleInput} />
                       </li>
                       <li>
-                        <button className="button primary" type="submit">
+                        <button className="checkout button" type="submit">
                           Checkout
                         </button>
                       </li>
@@ -127,8 +165,10 @@ export default class Cart extends Component {
                 </div> 
               )}
         </div>
+            </Zoom>
+          </Modal>
+        )}
       </div>
-      
     )
   }
 }

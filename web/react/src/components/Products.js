@@ -61,15 +61,6 @@ export default class Products extends Component {
                   <p>
                     {product.description}
                   </p>
-                  <p>
-                    Available sizes:{" "}
-                    {product.availableSizes.map((x) => (
-                      <span>
-                        {" "}
-                        <button className="button">{x}</button>
-                      </span>
-                    ))}
-                  </p>
                   <div className="product-price">
                       <div>{formatCurrency(product.price)}</div>
                       <button className="button primary" onClick={() => {
