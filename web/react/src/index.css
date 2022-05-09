@@ -59,8 +59,9 @@ header a {
     justify-content: flex-end;
 }
 
-
-
+.cart-button{
+  cursor: pointer;
+}
 
 main{
   grid-area: main;
@@ -273,6 +274,7 @@ input{
   color: #f0c040;
   border: none;
   left: 30%;
+  cursor: pointer;
   background: transparent;
 }
 .loginButton:hover{
