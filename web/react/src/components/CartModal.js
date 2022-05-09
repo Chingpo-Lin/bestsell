@@ -4,7 +4,7 @@ import Zoom from "react-reveal";
 import formatCurrency from '../util'
 import { Fade } from 'react-reveal';
 
-export default class Cart2 extends Component {
+export default class CartModal extends Component {
     constructor(props){
         super(props);
         this.state = {

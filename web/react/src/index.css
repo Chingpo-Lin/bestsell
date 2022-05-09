@@ -56,16 +56,11 @@ header a {
     display: flex;
     width: 115rem;
     align-items: center;
-    justify-content: end;
+    justify-content: flex-end;
 }
 
 
-.cart-button{
-  align-items: center;
-  margin-top: 5px;
-  background: transparent;
-  border: 0ch;
-}
+
 
 main{
   grid-area: main;
@@ -172,6 +167,12 @@ footer{
   justify-content: center;
   align-items: center;
 }
+.cart-button{
+  align-items: center;
+  margin-top: 5px;
+  background: transparent;
+  border: 0ch;
+}
 /* .cart-header{
   border-bottom: 0.1rem #c0c0c0 solid;
 } */
@@ -268,8 +269,14 @@ input{
 }
 
 .loginButton{
-  position:absolute;
-  right:20px;
+  display: flex;
+  color: #f0c040;
+  border: none;
+  left: 30%;
+  background: transparent;
+}
+.loginButton:hover{
+  color: #ff8000;
 }
 .ReactModal__Overlay {
   z-index: 99;

@@ -5,8 +5,7 @@ import Cookies from 'js-cookie';
 import Products from "./components/Products";
 import Filter from './components/Filter';
 import './config/config.js';
-import axios from 'axios';
-import { Navigate } from "react-router-dom"
+// import { Navigate } from "react-router-dom"
 import CartModal from './components/CartModal';
 
 export default class App extends React.Component {
@@ -139,9 +138,15 @@ export default class App extends React.Component {
       <div className="grid-container">
          <header>
             <a href="/">React Shopping Cart</a>
-            <div className="loginButton">
-            <button onClick={this.handleAuthButton}>{this.state.isLoggedIn ? "logout" : "login"}</button>
-            </div>
+            <button className='loginButton' 
+            onClick={this.handleAuthButton}>{this.state.isLoggedIn ? "logout" : "login"}</button>
+            <div className="sidebar">
+                <CartModal 
+                  cartItems={this.state.cartItems}
+                  removeFromCart={this.removeFromCart}
+                  createOrder={this.createOrder}
+                  />
+              </div>
           </header>
           <main> 
             <div className="content">
@@ -154,13 +159,6 @@ export default class App extends React.Component {
                 <Products products={this.state.products} 
                           addToCart={this.addToCart}
                           isLoggedIn={this.state.isLoggedIn} />
-              </div>
-              <div className="sidebar">
-                <Cart 
-                  cartItems={this.state.cartItems}
-                  removeFromCart={this.removeFromCart}
-                  createOrder={this.createOrder}
-                  />
               </div>
             </div> 
           </main>
