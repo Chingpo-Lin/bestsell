@@ -1,11 +1,11 @@
 import './App.css';
 import React from "react";
+import axios from 'axios';
+import Cookies from 'js-cookie';
 import Products from "./components/Products";
 import Filter from './components/Filter';
 import Cart from './components/Cart';
 import './config/config.js';
-import axios from 'axios';
-import { Navigate } from "react-router-dom"
 
 export default class App extends React.Component {
   //create several attributes of state in a constructor
@@ -18,17 +18,25 @@ export default class App extends React.Component {
       size:"",
       sort:"",
       isLoggedIn: false,
-      user:{},
-      token: "",
+      username:"",
+      sessionId: "",
       redirectToLogin: false
     };
   }
 
+  //check session and load products from server when homepage component is mounted
   componentDidMount() {
     let api = global.AppConfig.serverIp + "/pub/product/list_all_product"
+    let sessionId = Cookies.get('react-cookie-test');
+    if(sessionId){
+      this.setState({
+        isLoggedIn: true,
+        sessionId: sessionId
+      })
+    }
+
     axios.get(api)
         .then((response) => {
-
             let tempData = response.data
             console.log(tempData);
             this.setState({
@@ -38,17 +46,6 @@ export default class App extends React.Component {
         .catch(function (error) {
             console.log(error);
         })
-  }
-
-  handleSuccessfulAuth = (responsedata) => {
-    // sessionStorage.setItem('token', JSON.stringify(userToken));
-    console.log(responsedata)
-    window.sessionStorage.setItem("token", responsedata.token);
-    this.setState({
-      isLoggedIn: true,
-      user: responsedata.user,
-      redirectToLogin: false
-    });
   }
 
   createOrder = (order) => {
@@ -65,7 +62,8 @@ export default class App extends React.Component {
 
   addToCart = (product) => {
     if(!this.state.isLoggedIn){
-        this.setState({redirectToLogin:true}); //this will open login page on click of login button
+      //this will redirect user to login page if not logged in
+      window.location.href=global.AppConfig.webIp+"/login";
     }
     else{
       const cartItems = this.state.cartItems.slice();
@@ -115,15 +113,26 @@ export default class App extends React.Component {
     }
   };
 
-  render(){
-    if(this.state.redirectToLogin){
-      return <Navigate to='/login'/>;
+  //handle login & logout button
+  handleAuthButton  = () => {
+    if(this.state.isLoggedIn){
+      Cookies.remove('react-cookie-test');
+      this.setState({
+        isLoggedIn: false,
+        sessionId: ""
+      });
     }
+    else{
+      window.location.href=global.AppConfig.webIp+"/login";
+    }
+  }
+
+  render(){
     return (
       <div className="grid-container">
          <header>
             <a href="/">React Shopping Cart</a>
-            <a href={global.AppConfig.webIp+"/login"}><button>{this.state.isLoggedIn ? "logout" : "login"}</button></a>
+            <button onClick={this.handleAuthButton}>{this.state.isLoggedIn ? "logout" : "login"}</button>
           </header>
           <main> 
             <div className="content">
