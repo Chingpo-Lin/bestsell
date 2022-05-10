@@ -12,7 +12,7 @@ public interface UserService {
 
     int signup(User user);
 
-    boolean login(String phone, String pwd);
+    User login(String phone, String pwd);
 
     List<Cart> getCartByUserId(int userId);
 
