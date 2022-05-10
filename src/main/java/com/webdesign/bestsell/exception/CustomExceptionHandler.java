@@ -17,6 +17,7 @@ public class CustomExceptionHandler {
     public JsonData handle(Exception e) {
 
         logger.error("[error]", e);
+
         if (e instanceof SystemException) {
             SystemException systemException = (SystemException) e;
             return JsonData.buildError(systemException.getCode(), systemException.getMsg());
