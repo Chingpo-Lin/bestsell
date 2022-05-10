@@ -1,11 +1,10 @@
 import './App.css';
+import './config/config.js';
 import React from "react";
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import Products from "./components/Products";
 import Filter from './components/Filter';
-import './config/config.js';
-// import { Navigate } from "react-router-dom"
 import CartModal from './components/CartModal';
 
 export default class App extends React.Component {
@@ -26,7 +25,6 @@ export default class App extends React.Component {
 
   //check session and load products from server when homepage component is mounted
   componentDidMount() {
-    let api = global.AppConfig.serverIp + "/pub/product/list_all_product"
     let sessionId = Cookies.get('react-cookie-test');
     if(sessionId){
       this.setState({
@@ -34,7 +32,8 @@ export default class App extends React.Component {
         sessionId: sessionId
       })
     }
-    axios.get(api)
+
+    axios.get(global.AppConfig.serverIp + "/pub/product/list_all_product")
       .then((response) => {
         console.log("List_All_Products_Reponse",response.data);
         this.setState({
@@ -44,6 +43,18 @@ export default class App extends React.Component {
       .catch(function (error) {
         console.log("List_All_Products_Error",error);
       })
+
+    //load cart from user
+    // axios.get(global.AppConfig.serverIp + "/pri/cart/get_product_in_cart")
+    // .then((response) => {
+    //   console.log("Get_cart_item",response.data);
+    //   this.setState({
+    //     products:response.data.data
+    //   })
+    // })
+    // .catch(function (error) {
+    //   console.log("Get_cart_item_Error",error);
+    // })
   }
 
   createOrder = (order) => {
