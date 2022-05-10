@@ -1,8 +1,9 @@
+import './Login.css';
+import '../config/config.js';
 import React, { Component } from "react";
 import axios from "axios";
 import Cookies from 'js-cookie';
-import './Login.css';
-import '../config/config.js';
+
 
 export default class Login extends Component{
     constructor(props){
@@ -49,26 +50,38 @@ export default class Login extends Component{
 
     render(){
         return(
-            <div id="outer">
-            <div className="login-wrapper">
-            <h1>Please Log In</h1>
-            <form onSubmit = {this.login}>
-                <label>
-                <p>Username</p>
-                <input type="text" name = "username" onChange = {this.handleChange}/>
-                </label>
-                <label>
-                <p>Password</p>
-                <input type="password" name = "password" onChange = {this.handleChange} />
-                </label>
-                {this.state.error&&(
-                <div className = "has-text-danger"> { this.state.error }</div>
-                )}
-                <div id="submit">
-                <button>Submit</button>
-                </div>
-            </form>
-            </div>
+            <div className="grid-container">
+                <header>
+                    <a href="/">React Shopping Cart</a>
+                </header>
+                <main>
+                    <div id="login-outer">
+                        <div className="login-wrapper">
+                            <h1>Please Log In</h1>
+                            <form onSubmit = {this.login}>
+                                <label>
+                                    <p>Username</p>
+                                    <input type="text" name = "username" onChange = {this.handleChange}/>
+                                </label>
+                                <label>
+                                    <p>Password</p>
+                                    <input type="password" name = "password" onChange = {this.handleChange} />
+                                </label>
+                                {this.state.error&&(
+                                <div className = "has-text-danger"> { this.state.error }</div>
+                                )}
+                                <div id="submit">
+                                    <button>Submit</button>
+                                </div>
+                            </form>
+                            <div className="form_text">
+                                <p>Don't have an account? </p>
+                                <a className="form_link" href="/Registration" id="linkCreateAccount">Sign up here</a>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+                <footer>All right is reserved.</footer>
             </div>
         )
     }
