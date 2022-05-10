@@ -18,7 +18,8 @@ public class CustomExceptionHandler {
             SystemException systemException = (SystemException) e;
             return JsonData.buildError(systemException.getCode(), systemException.getMsg());
         } else {
-            return JsonData.buildError("error on server");
+            e.printStackTrace();
+            return JsonData.buildError(e.getMessage());
         }
     }
 }
