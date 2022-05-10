@@ -24,32 +24,31 @@ public class LoginInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
         boolean login = true;
-        // TODO
-        // check if user in session
-        String sessionId = "Default";
-        Cookie[] cookies = request.getCookies();
-        if (cookies == null) {
-            System.out.println("Intercepter: No Cookies");
-            login = false;
-        }
 
-        for (Cookie cookie: cookies) {
-            if (cookie.getName().equals("sessionId")) {
-                System.out.println("log out: found session id in cookie:" +  cookie.getValue());
-                sessionId = cookie.getValue();
-                break;
-            }
-        }
-
-        if (sessionId.equals("Default")) {
-            login = false;
-        }
-
-        System.out.println("enter interceptor part");
-        if (!login) {
-            sendJsonMessage(response, JsonData.buildError("please log in first"));
-            return false;
-        }
+//        String sessionId = "Default";
+//        Cookie[] cookies = request.getCookies();
+//        if (cookies == null) {
+//            System.out.println("Intercepter: No Cookies");
+//            return false;
+//        }
+//
+//        for (Cookie cookie: cookies) {
+//            if (cookie.getName().equals("sessionId")) {
+//                System.out.println("log out: found session id in cookie:" +  cookie.getValue());
+//                sessionId = cookie.getValue();
+//                break;
+//            }
+//        }
+//
+//        if (sessionId.equals("Default")) {
+//            login = false;
+//        }
+//
+//        System.out.println("enter interceptor part");
+//        if (!login) {
+//            sendJsonMessage(response, JsonData.buildError("please log in first"));
+//            return false;
+//        }
         return true;
     }
 
