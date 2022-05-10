@@ -1,6 +1,7 @@
 package com.webdesign.bestsell.controller;
 import com.webdesign.bestsell.domain.Product;
 import com.webdesign.bestsell.domain.User;
+import com.webdesign.bestsell.interceptor.LoginInterceptor;
 import com.webdesign.bestsell.service.FirebaseStorageService;
 import com.webdesign.bestsell.service.PictureService;
 import com.webdesign.bestsell.service.ProductService;
@@ -43,7 +44,6 @@ public class UserController {
     public JsonData signup(@RequestBody User user) {
 
         // adapt MD5 algorithm to user password
-
         if (userService.findUserByPhone(user.getPhone()) != null) {
             return JsonData.buildError("user exists");
         }
@@ -62,14 +62,14 @@ public class UserController {
     @PostMapping("login")
     public JsonData login(@RequestBody User user, HttpServletRequest request, HttpServletResponse response) {
         String crypPassword = MD5Utils.MD5(user.getPwd());
-        boolean ifLogin = userService.login(user.getPhone(),  crypPassword);
-        if (ifLogin) {
+        User loggedinUser = userService.login(user.getPhone(),  crypPassword);
+        if (loggedinUser != null) {
             String sessionID = UUID.randomUUID().toString();
             request.getSession().setAttribute(sessionID, user);
             Cookie cookie = new Cookie("sessionId", sessionID);
             cookie.setMaxAge(FIVE_DAYS);
             response.addCookie(cookie);
-            return JsonData.buildSuccess("Logged in + cookie: " + cookie.getValue().toString());
+            return JsonData.buildSuccess(loggedinUser);
         }
 
         return JsonData.buildError("Password or username invalid");
@@ -125,6 +125,18 @@ public class UserController {
      */
     @PostMapping("sell_product")
     public JsonData sellProduct(@RequestPart("product") Product product, @RequestParam("file") MultipartFile [] files) {
+
+        //add product to database
+        int uid = LoginInterceptor.currentUserID;
+        if (uid == -1) {
+            return JsonData.buildError("Not looged in");
+        }
+
+        product.setUserId(uid);
+        product.setCreateDate(new Date());
+        int row = productService.sell(product);
+
+        //save product image to firebase;
         String downloadURL = null;
         for (MultipartFile file : files) {
             try {
@@ -134,9 +146,6 @@ public class UserController {
                 return JsonData.buildError("Error occur");
             }
         }
-
-        product.setCreateDate(new Date());
-        int row = productService.sell(product);
 
         return JsonData.buildSuccess("success uploaded, URL:  " + downloadURL);
     }
@@ -149,8 +158,10 @@ public class UserController {
     @GetMapping("list_product_by_user_id")
     public JsonData listProductByUserId() {
 
-        // get uid from session later
-        int uid = 1;
+        int uid = LoginInterceptor.currentUserID;
+        if (uid == -1) {
+            return JsonData.buildError("Not looged in");
+        }
 
         List<Product> productList = productService.getProductByUserId(uid);
         System.out.println(productList);

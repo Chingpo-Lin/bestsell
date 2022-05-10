@@ -2,6 +2,7 @@ package com.webdesign.bestsell.controller;
 
 import com.webdesign.bestsell.domain.Cart;
 import com.webdesign.bestsell.domain.Product;
+import com.webdesign.bestsell.interceptor.LoginInterceptor;
 import com.webdesign.bestsell.service.ProductService;
 import com.webdesign.bestsell.service.UserService;
 import com.webdesign.bestsell.utils.JsonData;
@@ -28,8 +29,13 @@ public class CartController {
      */
     @GetMapping("get_product_in_cart")
     public JsonData getCartByUserId() {
-        int id = 2;
-        List<Cart> cartList = userService.getCartByUserId(id);
+
+        int uid = LoginInterceptor.currentUserID;
+        if (uid == -1) {
+            return JsonData.buildError("Not looged in");
+        }
+
+        List<Cart> cartList = userService.getCartByUserId(uid);
 
         List<Product> productList = new ArrayList<>();
         for (Cart cart: cartList) {
@@ -46,8 +52,13 @@ public class CartController {
      */
     @GetMapping("delete_cart")
     public JsonData deleteCartByCartId() {
-        int id = 0; // change
-        int row = userService.deleteItemFromCart(id);
+
+        int uid = LoginInterceptor.currentUserID;
+        if (uid == -1) {
+            return JsonData.buildError("Not looged in");
+        }
+
+        int row = userService.deleteItemFromCart(uid);
         return JsonData.buildSuccess(row);
     }
 
@@ -64,6 +75,12 @@ public class CartController {
      */
     @PostMapping("add_to_cart")
     public JsonData addToCart(@RequestBody Cart cart) {
+
+        int uid = LoginInterceptor.currentUserID;
+        if (uid == -1) {
+            return JsonData.buildError("Not looged in");
+        }
+        cart.setUserId(uid);
 
         int productId = cart.getProductId();
 

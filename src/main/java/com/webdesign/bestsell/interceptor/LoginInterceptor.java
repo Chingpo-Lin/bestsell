@@ -1,6 +1,7 @@
 package com.webdesign.bestsell.interceptor;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.webdesign.bestsell.domain.User;
 import com.webdesign.bestsell.utils.JsonData;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -12,6 +13,7 @@ import java.io.PrintWriter;
 
 public class LoginInterceptor implements HandlerInterceptor {
 
+    public static int currentUserID = -1;
     /**
      * handle all intercept cases
      * @param request
@@ -35,21 +37,27 @@ public class LoginInterceptor implements HandlerInterceptor {
 
         for (Cookie cookie: cookies) {
             if (cookie.getName().equals("sessionId")) {
-                System.out.println("log out: found session id in cookie:" +  cookie.getValue());
+                System.out.println("Interceptor: found a session id in cookie:" +  cookie.getValue());
                 sessionId = cookie.getValue();
                 break;
             }
         }
 
-        if (sessionId.equals("Default")) {
+        User user = (User)request.getSession().getAttribute(sessionId);
+
+        if (sessionId.equals("Default") ||  user == null) {
+            System.out.println("Interceptor: sessionId not match, cannot preceed");
             login = false;
         }
 
-        System.out.println("enter interceptor part");
         if (!login) {
-            sendJsonMessage(response, JsonData.buildError("please log in first"));
+            sendJsonMessage(response, JsonData.buildError("Interceptor: please log in first"));
             return false;
         }
+
+        currentUserID = user.getId();
+
+        System.out.println("Interceptor: successfully went through interceptor ");
         return true;
     }
 

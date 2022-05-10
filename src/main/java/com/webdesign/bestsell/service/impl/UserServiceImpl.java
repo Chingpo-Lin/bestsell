@@ -42,15 +42,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean login(String phone, String pwd) {
+    public User login(String phone, String pwd) {
         User user = userDao.login(phone, pwd);
         System.out.println(user == null);
         System.out.println(phone);
-        if (user != null) {
-            return true;
-        } else {
-            return false;
-        }
+
+        return user;
     }
 
     @Override
