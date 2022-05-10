@@ -1,4 +1,4 @@
-#outer {
+#login-outer {
     width:100%;
     display: flex;
     flex-direction: column;
@@ -15,9 +15,21 @@
     align-items: center;
 }
 
-form{
+#signup-outer {
+    width:100%;
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    height:80vh;  
+}
+
+.signup-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .has-text-danger{
@@ -29,4 +41,23 @@ form{
     display: flex;
     justify-content: center;
     margin-top: 25px;
+}
+
+form{
+    display: flex;
+    flex-direction: column;
+}
+
+.form_link {
+    color: blue;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.form_link:hover {
+    text-decoration: underline;
+}
+
+.form_text {
+    margin-top: 30px;
 }
