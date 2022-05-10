@@ -25,14 +25,14 @@ public class LoginInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
-        boolean login = true;
         // TODO
         // check if user in session
         String sessionId = "Default";
         Cookie[] cookies = request.getCookies();
         if (cookies == null) {
             System.out.println("Intercepter: No Cookies");
-            login = false;
+            sendJsonMessage(response, JsonData.buildError("Interceptor: No Cookies, please log in first"));
+            return false;
         }
 
         for (Cookie cookie: cookies) {
@@ -47,16 +47,11 @@ public class LoginInterceptor implements HandlerInterceptor {
 
         if (sessionId.equals("Default") ||  user == null) {
             System.out.println("Interceptor: sessionId not match, cannot preceed");
-            login = false;
-        }
-
-        if (!login) {
-            sendJsonMessage(response, JsonData.buildError("Interceptor: please log in first"));
+            sendJsonMessage(response, JsonData.buildError("Interceptor: No record of this sessionID, please log in first"));
             return false;
         }
 
         currentUserID = user.getId();
-
         System.out.println("Interceptor: successfully went through interceptor ");
         return true;
     }
