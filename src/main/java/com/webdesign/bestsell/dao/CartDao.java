@@ -16,10 +16,10 @@ public interface CartDao {
 
     /**
      * delete one product in cart by cart id
-     * @param cartId
+     * @param cart
      * @return
      */
-    int deleteCartByCartId(int cartId);
+    int deleteCartByProductId(Cart cart);
 
     /**
      * add items to cart
