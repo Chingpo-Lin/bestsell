@@ -65,7 +65,7 @@ public class UserController {
         User loggedinUser = userService.login(user.getPhone(),  crypPassword);
         if (loggedinUser != null) {
             String sessionID = UUID.randomUUID().toString();
-            request.getSession().setAttribute(sessionID, user);
+            request.getSession().setAttribute(sessionID, loggedinUser);
             Cookie cookie = new Cookie("sessionId", sessionID);
             cookie.setMaxAge(FIVE_DAYS);
             response.addCookie(cookie);
