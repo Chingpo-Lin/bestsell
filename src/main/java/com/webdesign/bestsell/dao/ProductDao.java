@@ -48,4 +48,10 @@ public interface ProductDao {
 
     int updateProduct(Product product);
 
+    /**
+     * get product detial
+     * @param productId
+     * @return
+     */
+    Product getProductDetailById(int productId);
 }
