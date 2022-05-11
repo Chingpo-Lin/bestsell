@@ -50,11 +50,13 @@ public class CartController {
      * localhost:8080/pri/cart/delete_cart
      * @return
      */
-    @GetMapping("delete_cart")
+    @PostMapping("delete_cart")
     public JsonData deleteCartByProductId(@RequestBody Cart cart) {
 
         // TODO
         // set userId to cart
+        int uid = LoginInterceptor.currentUserID;
+        cart.setUserId(uid);
 
         System.out.println(cart);
         int row = userService.deleteItemFromCart(cart);
