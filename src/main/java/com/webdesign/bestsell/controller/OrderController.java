@@ -84,7 +84,7 @@ public class OrderController {
             int result = userService.placeOrder(order);
             if (result <= 0) { return JsonData.buildError("error when place order");}
 
-            userService.deleteItemFromCart(cart.getId());
+            userService.deleteItemFromCart(cart);
             orderList.add(order);
         }
 

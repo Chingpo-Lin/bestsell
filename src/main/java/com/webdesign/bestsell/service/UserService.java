@@ -16,7 +16,7 @@ public interface UserService {
 
     List<Cart> getCartByUserId(int userId);
 
-    int deleteItemFromCart(int cartId);
+    int deleteItemFromCart(Cart cart);
 
     int addToCart(Cart cart);
 

@@ -51,14 +51,13 @@ public class CartController {
      * @return
      */
     @GetMapping("delete_cart")
-    public JsonData deleteCartByCartId() {
+    public JsonData deleteCartByProductId(@RequestBody Cart cart) {
 
-        int uid = LoginInterceptor.currentUserID;
-        if (uid == -1) {
-            return JsonData.buildError("Not looged in");
-        }
+        // TODO
+        // set userId to cart
 
-        int row = userService.deleteItemFromCart(uid);
+        System.out.println(cart);
+        int row = userService.deleteItemFromCart(cart);
         return JsonData.buildSuccess(row);
     }
 

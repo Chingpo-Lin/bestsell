@@ -56,8 +56,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public int deleteItemFromCart(int cardId) {
-        return cartDao.deleteCartByCartId(cardId);
+    public int deleteItemFromCart(Cart cart) {
+        return cartDao.deleteCartByProductId(cart);
     }
 
     @Override
