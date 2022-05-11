@@ -32,6 +32,7 @@ public class LoginInterceptor implements HandlerInterceptor {
         if (cookies == null) {
             System.out.println("Intercepter: No Cookies");
             sendJsonMessage(response, JsonData.buildError("Interceptor: No Cookies, please log in first"));
+            currentUserID = -1;
             return false;
         }
 
@@ -48,6 +49,7 @@ public class LoginInterceptor implements HandlerInterceptor {
         if (sessionId.equals("Default") ||  user == null) {
             System.out.println("Interceptor: sessionId not match, cannot preceed");
             sendJsonMessage(response, JsonData.buildError("Interceptor: No record of this sessionID, please log in first"));
+            currentUserID = -1;
             return false;
         }
 
