@@ -71,7 +71,8 @@ export default class App extends React.Component {
     axios.post(
       global.AppConfig.serverIp+"/pri/cart/delete_cart",
       {
-          "productId": product.id
+        "productId": product.id,
+        "userId": 14
       },
       {withCredentials: true}
   )
