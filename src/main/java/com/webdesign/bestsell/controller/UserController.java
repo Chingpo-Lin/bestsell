@@ -162,7 +162,7 @@ public class UserController {
         if (uid == -1) {
             return JsonData.buildError("Not looged in");
         }
-
+        System.out.println("here");
         List<Product> productList = productService.getProductByUserId(uid);
         System.out.println(productList);
         return JsonData.buildSuccess(productList);
