@@ -68,10 +68,23 @@ export default class App extends React.Component {
 
   removeFromCart = (product) =>{
     const cartItems = this.state.cartItems.slice(); // .slice() - shallow copy
+    axios.post(
+      global.AppConfig.serverIp+"/pri/cart/delete_cart",
+      {
+          "productId": product.id
+      },
+      {withCredentials: true}
+  )
+  .then(function (response){
+    console.log(response);
+  })
+  .catch(function (error){
+    console.log(error);
+  }) 
     this.setState({
       cartItems:cartItems.filter(x=>x.id !== product.id)
     })
-    localStorage.setItem("cartItems", JSON.stringify(cartItems.filter(x=>x.id !== product.id)));
+    // localStorage.setItem("cartItems", JSON.stringify(cartItems.filter(x=>x.id !== product.id)));
   }
 
   addToCart = (product) => {
