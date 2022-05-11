@@ -22,12 +22,11 @@ public class InterceptorConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-
-        registry.addInterceptor(corsInterceptor()).addPathPatterns("/**");
-
         // intercept all start with /pri except signup login and list_user
         registry.addInterceptor(loginInterceptor()).addPathPatterns("/pri/*/*/**")
-                .excludePathPatterns("/pri/user/signup","/pri/user/logout","/pri/user/login", "/pri/user/list_user", "/pri/user/sell_product");
+                .excludePathPatterns("/pri/user/signup","/pri/user/logout","/pri/user/login", "/pri/user/list_user");
+
+        registry.addInterceptor(corsInterceptor()).addPathPatterns("/**");
 
         WebMvcConfigurer.super.addInterceptors(registry);
     }

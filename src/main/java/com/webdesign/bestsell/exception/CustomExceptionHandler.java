@@ -10,15 +10,20 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @ControllerAdvice
 public class CustomExceptionHandler {
 
+    private final static Logger logger = LoggerFactory.getLogger(CustomExceptionHandler.class);
+
     @ExceptionHandler(value=Exception.class)
     @ResponseBody
     public JsonData handle(Exception e) {
+
+        logger.error("[error]", e);
 
         if (e instanceof SystemException) {
             SystemException systemException = (SystemException) e;
             return JsonData.buildError(systemException.getCode(), systemException.getMsg());
         } else {
-            return JsonData.buildError("error on server");
+            e.printStackTrace();
+            return JsonData.buildError("error on server: " + e.getMessage());
         }
     }
 }

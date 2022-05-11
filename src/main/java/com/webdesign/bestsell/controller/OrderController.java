@@ -3,6 +3,7 @@ package com.webdesign.bestsell.controller;
 import com.webdesign.bestsell.domain.Cart;
 import com.webdesign.bestsell.domain.Order;
 import com.webdesign.bestsell.domain.Product;
+import com.webdesign.bestsell.interceptor.LoginInterceptor;
 import com.webdesign.bestsell.service.ProductService;
 import com.webdesign.bestsell.service.UserService;
 import com.webdesign.bestsell.utils.JsonData;
@@ -31,8 +32,13 @@ public class OrderController {
      */
     @GetMapping("get_user_order")
     public JsonData getOrderByUserId() {
-        int id = 1;
-        List<Order> orderList = userService.getAllOrderByUserId(id);
+
+        int uid = LoginInterceptor.currentUserID;
+        if (uid == -1) {
+            return JsonData.buildError("Not looged in");
+        }
+
+        List<Order> orderList = userService.getAllOrderByUserId(uid);
         System.out.println(orderList);
         return JsonData.buildSuccess(orderList);
     }
@@ -46,14 +52,19 @@ public class OrderController {
     @Transactional
     public JsonData placeOrder() {
 
+        int uid = LoginInterceptor.currentUserID;
+        if (uid == -1) {
+            return JsonData.buildError("Not looged in");
+        }
+
         List<Order> orderList = new ArrayList<>();
         Order order = null;
-        int userId = 1;
-        List<Cart> cartList = userService.getCartByUserId(userId);
+
+        List<Cart> cartList = userService.getCartByUserId(uid);
         for (Cart cart: cartList) {
             int productId = cart.getProductId();
             order = new Order();
-            order.setUserId(userId);
+            order.setUserId(uid);
             order.setProductId(productId);
             order.setCreateTime(new Date());
 
@@ -87,8 +98,13 @@ public class OrderController {
      */
     @GetMapping("checkout")
     public JsonData checkOut() {
-        int userId = 1;
-        List<Cart> cartList = userService.getCartByUserId(userId);
+
+        int uid = LoginInterceptor.currentUserID;
+        if (uid == -1) {
+            return JsonData.buildError("Not looged in");
+        }
+
+        List<Cart> cartList = userService.getCartByUserId(uid);
         double totalPrice = 0;
         for (Cart cart: cartList) {
             totalPrice += productService.getProductById(cart.getProductId()).getPrice();
