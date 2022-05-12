@@ -108,7 +108,7 @@ public class OrderController {
         double totalPrice = 0;
 
         for (Cart cart: cartList) {
-            totalPrice += productService.getProductById(cart.getProductId()).getPrice();
+            totalPrice += productService.getProductById(cart.getProductId()).getPrice() * cart.getCount();
         }
         return JsonData.buildSuccess(totalPrice);
     }
