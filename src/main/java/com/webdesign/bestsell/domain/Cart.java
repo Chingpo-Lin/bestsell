@@ -2,34 +2,44 @@ package com.webdesign.bestsell.domain;
 
 public class Cart {
 
-    private int id;
+    private Integer id;
 
-    private int userId;
+    private Integer userId;
 
-    private int productId;
+    private Integer productId;
 
-    public int getId() {
+    private Integer count;
+
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public int getUserId() {
+    public Integer getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(Integer userId) {
         this.userId = userId;
     }
 
-    public int getProductId() {
+    public Integer getProductId() {
         return productId;
     }
 
-    public void setProductId(int productId) {
+    public void setProductId(Integer productId) {
         this.productId = productId;
+    }
+
+    public Integer getCount() {
+        return count;
+    }
+
+    public void setCount(Integer count) {
+        this.count = count;
     }
 
     @Override
@@ -38,6 +48,7 @@ public class Cart {
                 "id=" + id +
                 ", userId=" + userId +
                 ", productId=" + productId +
+                ", count=" + count +
                 '}';
     }
 }

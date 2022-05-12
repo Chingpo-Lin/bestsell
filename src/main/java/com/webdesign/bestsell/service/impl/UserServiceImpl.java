@@ -79,4 +79,16 @@ public class UserServiceImpl implements UserService {
     public User findUserByPhone(String phone) {
         return userDao.findUserByPhone(phone);
     }
+
+    @Override
+    public Cart getCartByUserIdAndProductId(int userId, int productId) {
+        return cartDao.getCartCountByUidAndPid(userId, productId);
+    }
+
+    @Override
+    public int updateCartCount(Cart cart) {
+        return cartDao.updateCartCount(cart);
+    }
+
+
 }

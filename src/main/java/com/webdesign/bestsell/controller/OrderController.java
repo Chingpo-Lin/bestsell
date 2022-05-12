@@ -92,12 +92,12 @@ public class OrderController {
     }
 
     /**
-     * checkout and get the total price
+     * get the total price
      * localhost:8080/pri/order/checkout
      * @return
      */
-    @GetMapping("checkout")
-    public JsonData checkOut() {
+    @GetMapping("get_total_price")
+    public JsonData getTotalPrice() {
 
         int uid = LoginInterceptor.currentUserID;
         if (uid == -1) {
@@ -106,6 +106,7 @@ public class OrderController {
 
         List<Cart> cartList = userService.getCartByUserId(uid);
         double totalPrice = 0;
+
         for (Cart cart: cartList) {
             totalPrice += productService.getProductById(cart.getProductId()).getPrice();
         }
