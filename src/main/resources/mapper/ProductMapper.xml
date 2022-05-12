@@ -39,6 +39,10 @@
         select *  from `product` where `category_id` = #{categoryId,jdbcType=INTEGER}
     </select>
 
+    <select id="searchProductByName" resultMap="ProductResultMap">
+        select * from `product` where `name` LIKE concat('%',#{name,jdbcType=VARCHAR},'%')
+    </select>
+
     <insert id="sell" parameterType="Product">
         INSERT INTO `product` (`user_id`, `price`, `img`, `description`, `create_date`, `stock`, `name`, `category_id`)
         VALUES (#{userId,jdbcType=INTEGER}, #{price,jdbcType=DOUBLE}, #{img,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR},
