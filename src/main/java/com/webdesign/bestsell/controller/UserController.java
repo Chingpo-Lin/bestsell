@@ -71,7 +71,6 @@ public class UserController {
             response.addCookie(cookie);
             return JsonData.buildSuccess(loggedinUser);
         }
-
         return JsonData.buildError("Password or username invalid");
     }
 
