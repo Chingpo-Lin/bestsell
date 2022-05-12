@@ -7,6 +7,7 @@ import com.webdesign.bestsell.service.ProductService;
 import com.webdesign.bestsell.service.UserService;
 import com.webdesign.bestsell.utils.JsonData;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -75,6 +76,7 @@ public class CartController {
      * @return
      */
     @PostMapping("add_to_cart")
+    @Transactional
     public JsonData addToCart(@RequestBody Cart cart) {
 
         int uid = LoginInterceptor.currentUserID;
@@ -93,7 +95,27 @@ public class CartController {
             }
         }
 
-        int row = userService.addToCart(cart);
-        return JsonData.buildSuccess(row);
+        Cart cart1 = userService.getCartByUserIdAndProductId(cart.getUserId(), cart.getProductId());
+
+        if (cart1 == null) {
+
+            // when no such item in current user's cart
+            cart.setCount(1);
+
+            int row = userService.addToCart(cart);
+            return JsonData.buildSuccess(row);
+        } else {
+
+            // when there is such item in current user's cart
+            cart1.setCount(cart1.getCount() + 1);
+
+            int num = productService.getProductById(cart1.getProductId()).getStock();
+            if (num < cart1.getCount()) {
+                return JsonData.buildError("no enough stock");
+            }
+
+            int row = userService.updateCartCount(cart1);
+            return JsonData.buildSuccess(row);
+        }
     }
 }

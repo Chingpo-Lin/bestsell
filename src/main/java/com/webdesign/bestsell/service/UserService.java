@@ -25,4 +25,8 @@ public interface UserService {
     List<Order> getAllOrderByUserId(int userId);
 
     User findUserByPhone(String phone);
+
+    Cart getCartByUserIdAndProductId(int userId, int productId);
+
+    int updateCartCount(Cart cart);
 }
