@@ -84,7 +84,6 @@ public class CartController {
             return JsonData.buildError("Not looged in");
         }
         cart.setUserId(uid);
-        System.out.println(uid);
         int productId = cart.getProductId();
 
         // can't add product of current user

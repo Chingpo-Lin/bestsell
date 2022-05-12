@@ -23,7 +23,7 @@ public class CorsInterceptor implements HandlerInterceptor {
         if (req.getMethod().equals("OPTIONS")) {
             resp.setStatus(HttpServletResponse.SC_OK);
         }
-        System.out.println("enter");
+        System.out.println("enter cors interceptor");
         return true;
     }
 

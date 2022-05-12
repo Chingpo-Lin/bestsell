@@ -143,7 +143,7 @@ public class UserController {
                 downloadURL = FirebaseService.upload(file);
                 pictureService.addPicture(product.getId(), downloadURL);
             } catch (Exception e) {
-                return JsonData.buildError("Error occur");
+                return JsonData.buildError("Error occur when uploading file");
             }
         }
 
@@ -162,7 +162,6 @@ public class UserController {
         if (uid == -1) {
             return JsonData.buildError("Not looged in");
         }
-        System.out.println("here");
         List<Product> productList = productService.getProductByUserId(uid);
         System.out.println(productList);
         return JsonData.buildSuccess(productList);
