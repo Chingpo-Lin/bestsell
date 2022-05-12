@@ -51,10 +51,6 @@ export default class App extends React.Component {
 
     axios.get(global.AppConfig.serverIp + "/pri/cart/get_product_in_cart", {withCredentials: true})
       .then((response) => {
-        if(!this.state.isLoggedIn){
-          //this will redirect user to login page if not logged in
-          window.location.href=global.AppConfig.webIp+"/login";
-        }
         console.log("Get_cart_item",response.data);
         this.setState({
           cartItems:response.data.data,
@@ -110,8 +106,6 @@ export default class App extends React.Component {
         }
       });
     }
-
-      if (!alreadyInCart){
         axios.post(
           global.AppConfig.serverIp+"/pri/cart/add_to_cart",
           {
@@ -121,13 +115,13 @@ export default class App extends React.Component {
       )
       .then(function (response){
         console.log(response);
+        if (!alreadyInCart){
         cartItems.push({product, count: 1});
+        }
       })
       .catch(function (error){
         console.log(error);
       })
-        
-      }
       this.setState({ cartItems:cartItems, cartLength:this.state.cartLength+1 });
       // localStorage.setItem("cartItems", JSON.stringify(cartItems));
     }
