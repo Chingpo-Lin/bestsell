@@ -21,4 +21,6 @@ public interface ProductService {
     Product getProductById(int id);
 
     int updateStock(Product product);
+
+    List<Product> searchProductByName(String name);
 }

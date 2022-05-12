@@ -1,6 +1,7 @@
 package com.webdesign.bestsell.dao;
 
 import com.webdesign.bestsell.domain.Product;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -46,12 +47,17 @@ public interface ProductDao {
      */
     Product getProductById(int id);
 
+    /**
+     * update product
+     * @param product
+     * @return
+     */
     int updateProduct(Product product);
 
     /**
-     * get product detial
-     * @param productId
+     * select all products that given name is included in product name
+     * @param name
      * @return
      */
-    Product getProductDetailById(int productId);
+    List<Product> searchProductByName(String name);
 }

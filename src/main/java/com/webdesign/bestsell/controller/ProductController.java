@@ -71,4 +71,15 @@ public class ProductController {
         System.out.println(product);
         return JsonData.buildSuccess(product);
     }
+
+    /**
+     * search all products that includes given name
+     * @param name
+     * @return
+     */
+    @GetMapping("search_product_by_name")
+    public JsonData searchProductByName(String name) {
+        List<Product> productList = productService.searchProductByName(name);
+        return JsonData.buildSuccess(productList);
+    }
 }
