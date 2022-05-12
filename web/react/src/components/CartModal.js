@@ -3,6 +3,7 @@ import Modal from "react-modal";
 import Zoom from "react-reveal";
 import formatCurrency from '../util'
 import { Fade } from 'react-reveal';
+import axios from 'axios';
 
 export default class CartModal extends Component {
     constructor(props){
@@ -14,7 +15,25 @@ export default class CartModal extends Component {
         address:"",
         showCheckout: false,
         click: false};
-    }
+    }  
+
+    getProductById(productId){
+      axios.get(global.AppConfig.serverIp + "/pub/product/get_product_by_id",{
+        params: {
+          "productId": productId
+        }
+      })
+        .then((response) => {
+          console.log("get_product_by_id",response.data);
+          this.setState({
+            cartItems:response.data.data
+          })
+        })
+        .catch(function (error) {
+          console.log("get_product_by_id_Error",error);
+        })
+    }  
+
     //assign the input info to the corresponding attributes
   handleInput = (event) =>{
     this.setState({[event.target.name]:event.target.value });
