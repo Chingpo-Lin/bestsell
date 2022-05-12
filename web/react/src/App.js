@@ -46,7 +46,8 @@ export default class App extends React.Component {
       })
 
     //load cart from user
-    axios.get(global.AppConfig.serverIp + "/pri/cart/get_product_in_cart")
+    axios.get(global.AppConfig.serverIp + "/pri/cart/get_product_in_cart",
+     {withCredentials: true})
     .then((response) => {
       if(!this.state.isLoggedIn){
         //this will redirect user to login page if not logged in
@@ -93,7 +94,7 @@ export default class App extends React.Component {
       //this will redirect user to login page if not logged in
       window.location.href=global.AppConfig.webIp+"/login";
     }
-    
+     else{ 
       const cartItems = this.state.cartItems.slice();
       let alreadyInCart = false;
       if (cartItems !==""){
@@ -104,7 +105,6 @@ export default class App extends React.Component {
         }
       });
     }
-    //  else{ 
       if (!alreadyInCart){
         axios.post(
           global.AppConfig.serverIp+"/pri/cart/add_to_cart",
@@ -123,7 +123,7 @@ export default class App extends React.Component {
       }
       this.setState({ cartItems });
       // localStorage.setItem("cartItems", JSON.stringify(cartItems));
-    // }
+    }
   }
 
   //sort products in order of latest, lowest and highest
