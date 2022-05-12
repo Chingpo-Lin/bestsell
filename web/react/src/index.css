@@ -53,10 +53,21 @@ header a {
 }
 
 .cart-icon{
-    display: flex;
-    width: 115rem;
-    align-items: center;
-    justify-content: flex-end;
+    display: inline-block;
+    width: 55rem;
+    text-align: end;
+}
+
+.cart-header{
+  width: 100rem;
+  display: flex;
+  justify-content: flex-end;
+  text-align: end;
+}
+.cart.cart-icon{
+  display: flex;
+  justify-content: center;
+  width: 80rem;
 }
 
 .cart-button{

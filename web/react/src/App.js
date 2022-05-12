@@ -20,7 +20,8 @@ export default class App extends React.Component {
       sort:"",
       isLoggedIn: false,
       username:"",
-      sessionId: ""
+      sessionId: "",
+      cartLength: 0
     };
   }
 
@@ -34,7 +35,8 @@ export default class App extends React.Component {
       })
     }
 
-    axios.get(global.AppConfig.serverIp + "/pub/product/list_all_product")
+    axios.get(global.AppConfig.serverIp + "/pub/product/list_all_product",
+    )
       .then((response) => {
         console.log("List_All_Products_Reponse",response.data);
         this.setState({
@@ -46,21 +48,23 @@ export default class App extends React.Component {
       })
 
     //load cart from user
-    axios.get(global.AppConfig.serverIp + "/pri/cart/get_product_in_cart",
-     {withCredentials: true})
-    .then((response) => {
-      if(!this.state.isLoggedIn){
-        //this will redirect user to login page if not logged in
-        window.location.href=global.AppConfig.webIp+"/login";
-      }
-      console.log("Get_cart_item",response.data);
-      this.setState({
-        cartItems:response.data.data
+
+    axios.get(global.AppConfig.serverIp + "/pri/cart/get_product_in_cart", {withCredentials: true})
+      .then((response) => {
+        if(!this.state.isLoggedIn){
+          //this will redirect user to login page if not logged in
+          window.location.href=global.AppConfig.webIp+"/login";
+        }
+        console.log("Get_cart_item",response.data);
+        this.setState({
+          cartItems:response.data.data,
+          cartLength:response.data.data.length
+        })
       })
-    })
-    .catch(function (error) {
-      console.log("Get_cart_item_Error",error);
-    })
+      .catch(function (error) {
+        console.log("Get_cart_item_Error",error);
+
+      })
   }
 
   createOrder = (order) => {
@@ -84,7 +88,8 @@ export default class App extends React.Component {
     console.log(error);
   }) 
     this.setState({
-      cartItems:cartItems.filter(x=>x.id !== product.id)
+      cartItems:cartItems.filter(x=>x.id !== product.id),
+      cartLength:this.state.cartLength - 1
     })
     // localStorage.setItem("cartItems", JSON.stringify(cartItems.filter(x=>x.id !== product.id)));
   }
@@ -105,6 +110,7 @@ export default class App extends React.Component {
         }
       });
     }
+
       if (!alreadyInCart){
         axios.post(
           global.AppConfig.serverIp+"/pri/cart/add_to_cart",
@@ -115,13 +121,14 @@ export default class App extends React.Component {
       )
       .then(function (response){
         console.log(response);
+        cartItems.push({product, count: 1});
       })
       .catch(function (error){
         console.log(error);
       })
-        cartItems.push({product, count: 1});
+        
       }
-      this.setState({ cartItems });
+      this.setState({ cartItems:cartItems, cartLength:this.state.cartLength+1 });
       // localStorage.setItem("cartItems", JSON.stringify(cartItems));
     }
   }
@@ -186,11 +193,21 @@ export default class App extends React.Component {
             <a href="/">React Shopping Cart</a>
             <button className='loginButton' 
             onClick={this.handleAuthButton}>{this.state.isLoggedIn ? "logout" : "login"}</button>
+             <div className='cart-icon'>
+             {this.state.cartLength === 0? ( 
+            <div className="cart-header">Cart is empty</div>
+        ) : (
+            <div className="cart-header">
+                You have {this.state.cartLength} items in the cart{" "}
+            </div>
+        )}
+            </div>
             <div className="sidebar">
                 <CartModal 
                   cartItems={this.state.cartItems}
                   removeFromCart={this.removeFromCart}
                   createOrder={this.createOrder}
+                  cartLength={this.state.cartLength}
                   />
               </div>
           </header>
