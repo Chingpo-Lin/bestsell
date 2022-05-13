@@ -1,7 +1,31 @@
 import React, { Component } from 'react'
 import formatCurrency from '../util';
+import axios from 'axios';
 
 export default class Orders extends Component {
+    constructor(props){
+        super(props);
+        this.state = {
+            isOrderPage: false,
+            cartItems: []
+        }
+    }
+
+componentDidMount() {
+    axios.post(global.AppConfig.serverIp + "/pri/order/place_order",
+        {
+         productId: this.props.cartItems.id   
+        },
+         {withCredentials: true})
+    .then((response) => {
+    console.log("place_order",response.data);
+    })
+    .catch(function (error) {
+    console.log("Get_cart_item_Error",error);
+    })
+
+}
+
   render() {
       const { orders } = this.props;
     return !orders ? (

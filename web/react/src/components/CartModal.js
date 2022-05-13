@@ -5,6 +5,7 @@ import formatCurrency from '../util'
 import { Fade } from 'react-reveal';
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import Orders from './Orders';
 
 export default class CartModal extends Component {
     constructor(props){
@@ -19,7 +20,9 @@ export default class CartModal extends Component {
         sessionId: "",
         isLoggedIn: false,
         cartItems: this.props.cartItems,
-        cartLength:this.props.cartLength};
+        cartLength:this.props.cartLength,
+        order:[],
+        totalPrice:0};
         
     }  
 
@@ -52,9 +55,9 @@ export default class CartModal extends Component {
       name: this.state.name,
       email: this.state.email,
       address: this.state.address,
-      cartItems: [],
+      cartItems: this.state.cartItems,
     };
-    this.props.createOrder(order);
+    this.setState({order:  order})
   }
 
   openCart() {
@@ -81,6 +84,18 @@ export default class CartModal extends Component {
       })
       .catch(function (error) {
         console.log("Get_cart_item_Error",error);
+      })
+
+    axios.get(global.AppConfig.serverIp + "/pri/order/get_total_price", 
+    {withCredentials: true})
+      .then((response) => {
+        console.log("get_total_price",response.data);
+        this.setState({
+          totalPrice: response.data.data
+        })
+      })
+      .catch(function (error) {
+        console.log("get_total_price",error);
       })
   }
 
@@ -168,10 +183,13 @@ export default class CartModal extends Component {
               <div className="cart">
                 <div className="total">
                   <div>
-                    Total:{" "}
-                    {formatCurrency(
-                      cartItems.reduce((a, c) => a + c.price * 1, 0)
-                    )}
+                    Total:{" "}{"$"}
+                    {
+                      this.state.totalPrice
+                    // formatCurrency(
+                    //   cartItems.reduce((a, c) => a + c.price * c.count, 0)
+                    // )
+                    }
                   </div>
                   <button
                     onClick={() => {
@@ -212,9 +230,11 @@ export default class CartModal extends Component {
                         onChange={this.handleInput} />
                       </li>
                       <li>
+                        <a href= {window.location.href=global.AppConfig.webIp+"/Orders"}
+                            onClick={() => <Orders Orders = {this.state.order} />}>
                         <button className="checkout button" type="submit">
                           Checkout
-                        </button>
+                        </button></a>
                       </li>
                     </ul>
                   </form>
