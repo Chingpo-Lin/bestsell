@@ -28,7 +28,7 @@ public class CartController {
      * localhost:8080/pri/cart/get_product_in_cart
      * @return
      */
-    @GetMapping("get_product_in_cart")
+    @GetMapping("get_cart")
     public JsonData getCartByUserId() {
 
         int uid = LoginInterceptor.currentUserID;
@@ -38,12 +38,12 @@ public class CartController {
 
         List<Cart> cartList = userService.getCartByUserId(uid);
 
-        List<Product> productList = new ArrayList<>();
-        for (Cart cart: cartList) {
-            int productId = cart.getProductId();
-            productList.add(productService.getProductById(productId));
-        }
-        return JsonData.buildSuccess(productList);
+//        List<Product> productList = new ArrayList<>();
+//        for (Cart cart: cartList) {
+//            int productId = cart.getProductId();
+//            productList.add(productService.getProductById(productId));
+//        }
+        return JsonData.buildSuccess(cartList);
     }
 
     /**
