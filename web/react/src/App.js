@@ -20,25 +20,22 @@ export default class App extends React.Component {
       sort:"",
       isLoggedIn: false,
       username:"",
-      sessionId: "",
       cartLength: 0
     };
   }
 
   //check session and load products from server when homepage component is mounted
   componentDidMount() {
-    let sessionId = Cookies.get('react-cookie-test');
-    if(sessionId){
+    let session = Cookies.get('react-cookie-test');
+    if(session){
       this.setState({
-        isLoggedIn: true,
-        sessionId: sessionId
+        isLoggedIn: true
       })
     }
 
-    axios.get(global.AppConfig.serverIp + "/pub/product/list_all_product",
-    )
+    axios.get(global.AppConfig.serverIp + "/pub/product/list_all_product")
       .then((response) => {
-        console.log("List_All_Products_Reponse",response.data);
+        console.log("List_All_Products_Response",response.data);
         this.setState({
           products:response.data.data
         })
@@ -47,23 +44,25 @@ export default class App extends React.Component {
         console.log("List_All_Products_Error",error);
       })
 
-    //load cart from user
-
+    //load cart from user & check login status
     axios.get(global.AppConfig.serverIp + "/pri/cart/get_product_in_cart", {withCredentials: true})
       .then((response) => {
-        if(!this.state.isLoggedIn){
-          //this will redirect user to login page if not logged in
-          window.location.href=global.AppConfig.webIp+"/login";
-        }
         console.log("Get_cart_item",response.data);
+        if(response.data.code === -1){
+          if(session){
+            Cookies.remove('react-cookie-test');
+            this.setState({
+              isLoggedIn: false
+            })
+          }
+        }
         this.setState({
           cartItems:response.data.data,
-          cartLength:response.data.data.length
+          cartLength:response.data.data.length,
         })
       })
       .catch(function (error) {
         console.log("Get_cart_item_Error",error);
-
       })
   }
 
@@ -82,10 +81,10 @@ export default class App extends React.Component {
       {withCredentials: true}
   )
   .then(function (response){
-    console.log(response);
+    console.log("remove_cart_response",response);
   })
   .catch(function (error){
-    console.log(error);
+    console.log("remove_cart_error",error);
   }) 
     this.setState({
       cartItems:cartItems.filter(x=>x.id !== product.id),
@@ -110,8 +109,6 @@ export default class App extends React.Component {
         }
       });
     }
-
-      if (!alreadyInCart){
         axios.post(
           global.AppConfig.serverIp+"/pri/cart/add_to_cart",
           {
@@ -120,14 +117,14 @@ export default class App extends React.Component {
           {withCredentials: true}
       )
       .then(function (response){
-        console.log(response);
+        console.log("add_cart_response",response);
+        if (!alreadyInCart){
         cartItems.push({product, count: 1});
+        }
       })
       .catch(function (error){
-        console.log(error);
+        console.log("add_cart_error",error);
       })
-        
-      }
       this.setState({ cartItems:cartItems, cartLength:this.state.cartLength+1 });
       // localStorage.setItem("cartItems", JSON.stringify(cartItems));
     }
@@ -170,11 +167,10 @@ export default class App extends React.Component {
       //request to logout user
       axios.get(global.AppConfig.serverIp+"/pri/user/logout", { withCredentials: true })
       .then((response) => {
-        console.log("Logout_Reponse",response.data);
+        console.log("Logout_Response",response.data);
         Cookies.remove('react-cookie-test');
         this.setState({
-          isLoggedIn: false,
-          sessionId: ""
+          isLoggedIn: false
         });
       })
       .catch(function (error) {

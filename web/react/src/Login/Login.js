@@ -35,7 +35,7 @@ export default class Login extends Component{
         .then(response => {
             if (response.data.code === 0) {
                 //if login success, set cookie and redirect to homepage
-                console.log("Login_Reponse",response.data);
+                console.log("Login_Response",response.data);
                 Cookies.set("react-cookie-test","loggedin",{expires: 1});
                 window.location.replace(global.AppConfig.webIp);
             }
