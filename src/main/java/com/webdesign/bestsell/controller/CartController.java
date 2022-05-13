@@ -28,7 +28,7 @@ public class CartController {
      * localhost:8080/pri/cart/get_product_in_cart
      * @return
      */
-    @GetMapping("get_cart")
+    @GetMapping("get_cart_by_user")
     public JsonData getCartByUserId() {
 
         int uid = LoginInterceptor.currentUserID;
