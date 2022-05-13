@@ -147,6 +147,7 @@ public class UserController {
             }
         }
 
+        product.setImg(downloadURL);
         return JsonData.buildSuccess("success uploaded, URL:  " + downloadURL);
     }
 
