@@ -13,14 +13,13 @@ export default class App extends React.Component {
     super();
     this.state = {
       products:[],
-      cartItems:[],
       // localStorage.getItem("cartItems")?
       //   JSON.parse(localStorage.getItem("cartItems")):[],
       size:"",
       sort:"",
       isLoggedIn: false,
       username:"",
-      cartLength: 0
+      cartLength: 0,
     };
   }
 
@@ -45,9 +44,9 @@ export default class App extends React.Component {
       })
 
     //load cart from user & check login status
-    axios.get(global.AppConfig.serverIp + "/pri/cart/get_product_in_cart", {withCredentials: true})
+    axios.get(global.AppConfig.serverIp + "/pri/cart/get_cart_by_user", {withCredentials: true})
       .then((response) => {
-        console.log("Get_cart_item",response.data);
+        console.log("get_cart_by_user",response.data);
         if(response.data.code === -1){
           if(session){
             Cookies.remove('react-cookie-test');
@@ -57,12 +56,10 @@ export default class App extends React.Component {
           }
         }
         this.setState({
-          cartItems:response.data.data,
           cartLength:response.data.data.length,
-        })
-      })
+        })})
       .catch(function (error) {
-        console.log("Get_cart_item_Error",error);
+        console.log("Get_cart_Error",error);
       })
   }
 
@@ -70,27 +67,8 @@ export default class App extends React.Component {
     alert("Need to save order for " + order.name);
   }
 
-  removeFromCart = (product) =>{
-    const cartItems = this.state.cartItems.slice(); // .slice() - shallow copy
-    axios.post(
-      global.AppConfig.serverIp+"/pri/cart/delete_cart",
-      {
-        "productId": product.id,
-        "userId": 14
-      },
-      {withCredentials: true}
-  )
-  .then(function (response){
-    console.log("remove_cart_response",response);
-  })
-  .catch(function (error){
-    console.log("remove_cart_error",error);
-  }) 
-    this.setState({
-      cartItems:cartItems.filter(x=>x.id !== product.id),
-      cartLength:this.state.cartLength - 1
-    })
-    // localStorage.setItem("cartItems", JSON.stringify(cartItems.filter(x=>x.id !== product.id)));
+  removeCount = (count) =>{
+    this.setState({cartLength:count});
   }
 
   addToCart = (product) => {
@@ -98,35 +76,57 @@ export default class App extends React.Component {
       //this will redirect user to login page if not logged in
       window.location.href=global.AppConfig.webIp+"/login";
     }
-     else{ 
-      const cartItems = this.state.cartItems.slice();
-      let alreadyInCart = false;
-      if (cartItems !==""){
-      cartItems.forEach(item => {
-        if (item.id === product.id){
-          item.count++;
-          alreadyInCart = true;
-        }
-      });
-    }
-        axios.post(
-          global.AppConfig.serverIp+"/pri/cart/add_to_cart",
-          {
-              "productId": product.id
-          },
-          {withCredentials: true}
+     else{
+      axios.post(
+        global.AppConfig.serverIp+"/pri/cart/add_to_cart",
+        {
+            "productId": product.id
+        },
+        {withCredentials: true}
       )
       .then(function (response){
         console.log("add_cart_response",response);
-        if (!alreadyInCart){
-        cartItems.push({product, count: 1});
+        if(response.data.code < 0){
+          alert("Out of stock!");
         }
       })
       .catch(function (error){
         console.log("add_cart_error",error);
       })
-      this.setState({ cartItems:cartItems, cartLength:this.state.cartLength+1 });
-      // localStorage.setItem("cartItems", JSON.stringify(cartItems));
+      this.setState({ cartLength: this.state.cartLength+1 });
+      
+      // axios.post(global.AppConfig.serverIp+"/pri/cart/add_to_cart",  JSON.stringify({"productId": product.id },
+      //   {'content-type' : 'application/json',
+      //              'withCredentials': 'true'}
+      // ),(err, response, body) => {
+      //   if (err) throw err;
+      //     body = JSON.parse(body)
+      //     if(response.data.code !== -1){
+      //       this.setState({ cartLength: this.state.cartLength + 1});
+      //         }else{
+      //           alert("Out of stock!");
+      //         }
+      //   console.log('response: ', response);
+      // })
+      // (async () => {
+      //   const rawResponse = await fetch(global.AppConfig.serverIp+"/pri/cart/add_to_cart",{
+      //     method:'POST',
+      //     headers:{
+      //       'Accept': 'application/json',
+      //       'Content-Type':'application/json',
+      //       'withCredentials': 'true'
+      //     },
+      //     body:JSON.stringify({"productId": product.id })
+      //   });
+        
+      //   if (rawResponse.ok){
+      //     if(rawResponse.data.code !== -1){
+      //       this.setState({ cartLength: this.state.cartLength + 1});
+      //     }else{
+      //       alert("Out of stock!");
+      //     }
+      //   }
+      // })
     }
   }
 
@@ -183,6 +183,8 @@ export default class App extends React.Component {
   }
 
   render(){
+    console.log("cart: ", this.state.cart)
+    console.log("cart items: ", this.state.cartItems)
     return (
       <div className="grid-container">
          <header>
@@ -200,10 +202,8 @@ export default class App extends React.Component {
             </div>
             <div className="sidebar">
                 <CartModal 
-                  cartItems={this.state.cartItems}
-                  removeFromCart={this.removeFromCart}
                   createOrder={this.createOrder}
-                  cartLength={this.state.cartLength}
+                  removeCount={this.removeCount}
                   />
               </div>
           </header>

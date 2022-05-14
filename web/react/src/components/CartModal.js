@@ -19,34 +19,43 @@ export default class CartModal extends Component {
         click: false,
         sessionId: "",
         isLoggedIn: false,
-        cartItems: this.props.cartItems,
-        cartLength:this.props.cartLength,
+        cartItems: [],
+        cartLength:0,
         order:[],
-        totalPrice:0};
+        totalPrice:0,
+        cart:[]};
         
-    }  
-
-    // getProductById(productId){
-    //   axios.get(global.AppConfig.serverIp + "/pub/product/get_product_by_id",{
-    //     params: {
-    //       "productId": productId
-    //     }
-    //   })
-    //     .then((response) => {
-    //       console.log("get_product_by_id",response.data);
-    //       this.setState({
-    //         cartItems:response.data.data
-    //       })
-    //     })
-    //     .catch(function (error) {
-    //       console.log("get_product_by_id_Error",error);
-    //     })
-    // }  
+    }   
 
     //assign the input info to the corresponding attributes
   handleInput = (event) =>{
     this.setState({[event.target.name]:event.target.value });
   };
+
+  removeFromCart = (product) =>{
+    const cartItems = this.state.cartItems.slice().filter(x=>x.id !== product.id); // .slice() - shallow copy
+    
+    axios.post(
+      global.AppConfig.serverIp+"/pri/cart/delete_cart",
+      {
+        "productId": product.id,
+        "userId": 14
+      },
+      {withCredentials: true}
+    )
+    .then(function (response){
+      console.log("remove_cart_response",response);
+    })
+    .catch(function (error){
+      console.log("remove_cart_error",error);
+    })
+    const removedCount = this.state.cartLength - this.state.cart.find(e => e.productId === product.id).count;
+    this.setState({
+      cartItems:cartItems,
+      cartLength:removedCount
+    })
+    this.props.removeCount(removedCount);
+  }
 
   //create new order
   createOrder = (event) =>{
@@ -68,23 +77,52 @@ export default class CartModal extends Component {
         sessionId: sessionId
       })
     }
+    
     //load cart from user
-    axios.get(global.AppConfig.serverIp + "/pri/cart/get_product_in_cart", 
-    {withCredentials: true})
+    axios.get(global.AppConfig.serverIp + "/pri/cart/get_cart_by_user", {withCredentials: true})
       .then((response) => {
+        console.log("get_cart_by_user_response",response.data);
         if(!this.state.isLoggedIn){
           //this will redirect user to login page if not logged in
           window.location.href=global.AppConfig.webIp+"/login";
         }
-        console.log("Get_cart_item",response.data);
         this.setState({
-          cartItems:response.data.data,
+          cart: response.data.data,
           cartLength:response.data.data.length
         })
-      })
+        console.log(response.data.data);
+        console.log(response.data.data.length);
+        // for (let i = 0; i < response.data.data.length; i++){
+          response.data.data.forEach((element) => {
+          axios.get(global.AppConfig.serverIp + "/pub/product/get_product_by_id",
+          { 
+            params:
+              {
+                productId: element.productId
+              }
+          } 
+          ,{withCredentials: true})
+        .then((response2) => {
+          console.log("get_product_by_id_response",response.data);
+          if (response.data.data.length === 0){
+            this.setState({
+              cartItems: response2.data.data
+            })
+          } else {
+            this.setState({
+              cartItems: this.state.cartItems.concat(response2.data.data)
+            })
+          }
+        })
+        .catch(function (error) {
+          console.log("get_product_by_id_Error",error);
+        })
+  })})
+      
       .catch(function (error) {
-        console.log("Get_cart_item_Error",error);
+        console.log("Get_cart_Error",error);
       })
+
 
     axios.get(global.AppConfig.serverIp + "/pri/order/get_total_price", 
     {withCredentials: true})
@@ -100,20 +138,26 @@ export default class CartModal extends Component {
   }
 
     openModal = (product) => {
-        this.setState({product});
-        this.setState({click: true});
+        this.setState({product, click: true});
+        // this.setState({cartItems: this.state.cartItems});
         
     };
     closeModal = () => {
-        this.setState({product: null});
-        this.setState({click: false});
+        this.setState({
+          product: null,
+          click: false,
+          cartItems:[],
+          cart:[],
+          cartLength:0
+        });
     };
 
   render() {
       const {product} = this.state;
       const {click} = this.state;
       const {cartItems} = this.state;
-      console.log("cartItems",cartItems);
+      console.log("cartItems in CartModal: ", cartItems);
+      // console.log("cartItems",cartItems);
     return (
       <div>
         <div className='cart-icon'>
@@ -162,12 +206,10 @@ export default class CartModal extends Component {
                           <div>
                           <div>{item.name}</div>
                           <div className="right">
-                            {formatCurrency(item.price)} x {1}{" "}
-                            <button 
+                            {formatCurrency(item.price)} x {this.state.cart.find(e => e.productId === item.id).count}{" "}
+                            <button
                               className="button"
-                              onClick={() => this.props.removeFromCart(item)
-                                            ||  this.setState({cartItems:cartItems.filter(x=>x.id !== item.id)})
-                                            ||  this.setState({cartLength:this.props.cartLength - 1})}>
+                              onClick={() => this.removeFromCart(item)}>
                              Remove   
                           </button>
                           </div>

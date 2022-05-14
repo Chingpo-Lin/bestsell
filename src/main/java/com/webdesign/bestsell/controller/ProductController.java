@@ -65,8 +65,8 @@ public class ProductController {
      * @return
      */
     @GetMapping("get_product_by_id")
-    public JsonData getProductById(int productId) {
-        System.out.println(productId);
+    public JsonData getProductById(Integer productId) {
+        System.out.println("debugddd:" + productId);
         Product product = productService.getProductById(productId);
         System.out.println(product);
         return JsonData.buildSuccess(product);
