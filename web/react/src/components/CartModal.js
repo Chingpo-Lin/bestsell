@@ -5,29 +5,28 @@ import formatCurrency from '../util'
 import { Fade } from 'react-reveal';
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import Orders from './Orders';
 
 export default class CartModal extends Component {
     constructor(props){
-        super(props);
-        this.state = {
+      super(props);
+      this.state = {
         product: null,
         name:"",
         email:"",
         address:"",
         showCheckout: false,
         click: false,
-        sessionId: "",
+        userId: "",
         isLoggedIn: false,
         cartItems: [],
         cartLength:0,
         order:[],
         totalPrice:0,
-        cart:[]};
-        
-    }   
+        cart:[]
+      };
+    }
 
-    //assign the input info to the corresponding attributes
+  //assign the input info to the corresponding attributes
   handleInput = (event) =>{
     this.setState({[event.target.name]:event.target.value });
   };
@@ -39,22 +38,22 @@ export default class CartModal extends Component {
       global.AppConfig.serverIp+"/pri/cart/delete_cart",
       {
         "productId": product.id,
-        "userId": 14
+        "userId": this.state.userId
       },
       {withCredentials: true}
     )
-    .then(function (response){
+    .then((response) => {
       console.log("remove_cart_response",response);
+      const removedCount = this.state.cartLength - this.state.cart.find(e => e.productId === product.id).count;
+      this.setState({
+        cartItems:cartItems,
+        cartLength:removedCount
+      })
+      this.props.removeCount(removedCount);
     })
     .catch(function (error){
       console.log("remove_cart_error",error);
     })
-    const removedCount = this.state.cartLength - this.state.cart.find(e => e.productId === product.id).count;
-    this.setState({
-      cartItems:cartItems,
-      cartLength:removedCount
-    })
-    this.props.removeCount(removedCount);
   }
 
   //create new order
@@ -70,11 +69,12 @@ export default class CartModal extends Component {
   }
 
   openCart() {
-    let sessionId = Cookies.get('react-cookie-test');
-    if(sessionId){
+    let session = Cookies.get('react-cookie-test');
+    if(session){
+      let sessionId = JSON.parse(session);
       this.setState({
         isLoggedIn: true,
-        sessionId: sessionId
+        userId: sessionId.id
       })
     }
     
@@ -86,46 +86,30 @@ export default class CartModal extends Component {
           //this will redirect user to login page if not logged in
           window.location.href=global.AppConfig.webIp+"/login";
         }
+        let sum = 0;
+        for (let i = 0; i < response.data.data.length; i++) {
+          sum += response.data.data[i].count;
+        }
         this.setState({
           cart: response.data.data,
-          cartLength:response.data.data.length
+          cartLength:sum
         })
-        console.log(response.data.data);
-        console.log(response.data.data.length);
-        // for (let i = 0; i < response.data.data.length; i++){
-          response.data.data.forEach((element) => {
-          axios.get(global.AppConfig.serverIp + "/pub/product/get_product_by_id",
-          { 
-            params:
-              {
-                productId: element.productId
-              }
-          } 
-          ,{withCredentials: true})
+        axios.get(global.AppConfig.serverIp + "/pri/cart/get_product_in_cart", {withCredentials: true})
         .then((response2) => {
-          console.log("get_product_by_id_response",response.data);
-          if (response.data.data.length === 0){
-            this.setState({
-              cartItems: response2.data.data
-            })
-          } else {
-            this.setState({
-              cartItems: this.state.cartItems.concat(response2.data.data)
-            })
-          }
+          console.log("get_product_in_cart_response",response2.data);
+          this.setState({
+            cartItems: response2.data.data
+          })
         })
         .catch(function (error) {
-          console.log("get_product_by_id_Error",error);
+          console.log("get_product_in_cart_Error",error);
         })
-  })})
-      
+      })
       .catch(function (error) {
         console.log("Get_cart_Error",error);
       })
 
-
-    axios.get(global.AppConfig.serverIp + "/pri/order/get_total_price", 
-    {withCredentials: true})
+    axios.get(global.AppConfig.serverIp + "/pri/order/get_total_price", {withCredentials: true})
       .then((response) => {
         console.log("get_total_price",response.data);
         this.setState({
@@ -137,20 +121,40 @@ export default class CartModal extends Component {
       })
   }
 
-    openModal = (product) => {
-        this.setState({product, click: true});
-        // this.setState({cartItems: this.state.cartItems});
-        
-    };
-    closeModal = () => {
-        this.setState({
-          product: null,
-          click: false,
-          cartItems:[],
-          cart:[],
-          cartLength:0
-        });
-    };
+  openModal = (product) => {
+    this.setState({product, click: true});
+    // this.setState({cartItems: this.state.cartItems});
+  };
+
+  closeModal = () => {
+    this.setState({
+      product: null,
+      click: false,
+      cartItems:[],
+      cart:[],
+      cartLength:0
+    });
+  };
+
+  handleCheckOutButton = () => {
+    axios.post(
+      global.AppConfig.serverIp+"/pri/order/place_order", {}, {withCredentials: true}
+    )
+    .then((response)  => {
+      console.log("place_order_response",response);
+      this.setState({
+        product: null,
+        click: false,
+        cartItems:[],
+        cart:[],
+        cartLength:0
+      });
+      this.props.removeCount(0);
+    })
+    .catch(function (error){
+      console.log("place_order_error",error);
+    })
+  }
 
   render() {
       const {product} = this.state;
@@ -248,11 +252,11 @@ export default class CartModal extends Component {
                   <form onSubmit={this.createOrder}>
                     <ul className="form-container">
                       <li>
-                        <label>Email</label>
-                        <input 
+                        <label>Phone</label>
+                        <input
                         name="email"
                         type="email" 
-                        required 
+                         
                         onChange={this.handleInput} />
                       </li>
                       <li>
@@ -260,7 +264,7 @@ export default class CartModal extends Component {
                         <input 
                         name="name"
                         type="text" 
-                        required 
+                         
                         onChange={this.handleInput} />
                       </li>
                       <li>
@@ -268,15 +272,11 @@ export default class CartModal extends Component {
                         <input 
                         name="address"
                         type="text" 
-                        required 
+                         
                         onChange={this.handleInput} />
                       </li>
                       <li>
-                        <a href= {window.location.href=global.AppConfig.webIp+"/Orders"}
-                            onClick={() => <Orders Orders = {this.state.order} />}>
-                        <button className="checkout button" type="submit">
-                          Checkout
-                        </button></a>
+                        <button className='proceed button' onClick={this.handleCheckOutButton} >check out</button>
                       </li>
                     </ul>
                   </form>

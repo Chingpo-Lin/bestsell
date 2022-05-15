@@ -46,7 +46,7 @@ export default class App extends React.Component {
     //load cart from user & check login status
     axios.get(global.AppConfig.serverIp + "/pri/cart/get_cart_by_user", {withCredentials: true})
       .then((response) => {
-        console.log("get_cart_by_user",response.data);
+        console.log("get_cart_by_user_response",response.data);
         if(response.data.code === -1){
           if(session){
             Cookies.remove('react-cookie-test');
@@ -55,11 +55,18 @@ export default class App extends React.Component {
             })
           }
         }
-        this.setState({
-          cartLength:response.data.data.length,
-        })})
+        else{
+          let sum = 0;
+          for (let i = 0; i < response.data.data.length; i++) {
+            sum += response.data.data[i].count;
+          }
+          this.setState({
+            cartLength:sum,
+          })
+        }
+      })
       .catch(function (error) {
-        console.log("Get_cart_Error",error);
+        console.log("Get_cart_by_user_Error",error);
       })
   }
 
@@ -76,7 +83,7 @@ export default class App extends React.Component {
       //this will redirect user to login page if not logged in
       window.location.href=global.AppConfig.webIp+"/login";
     }
-     else{
+    else{
       axios.post(
         global.AppConfig.serverIp+"/pri/cart/add_to_cart",
         {
@@ -84,49 +91,18 @@ export default class App extends React.Component {
         },
         {withCredentials: true}
       )
-      .then(function (response){
+      .then((response) => {
         console.log("add_cart_response",response);
         if(response.data.code < 0){
           alert("Out of stock!");
+        }
+        else{
+          this.setState({ cartLength: this.state.cartLength+1 });
         }
       })
       .catch(function (error){
         console.log("add_cart_error",error);
       })
-      this.setState({ cartLength: this.state.cartLength+1 });
-      
-      // axios.post(global.AppConfig.serverIp+"/pri/cart/add_to_cart",  JSON.stringify({"productId": product.id },
-      //   {'content-type' : 'application/json',
-      //              'withCredentials': 'true'}
-      // ),(err, response, body) => {
-      //   if (err) throw err;
-      //     body = JSON.parse(body)
-      //     if(response.data.code !== -1){
-      //       this.setState({ cartLength: this.state.cartLength + 1});
-      //         }else{
-      //           alert("Out of stock!");
-      //         }
-      //   console.log('response: ', response);
-      // })
-      // (async () => {
-      //   const rawResponse = await fetch(global.AppConfig.serverIp+"/pri/cart/add_to_cart",{
-      //     method:'POST',
-      //     headers:{
-      //       'Accept': 'application/json',
-      //       'Content-Type':'application/json',
-      //       'withCredentials': 'true'
-      //     },
-      //     body:JSON.stringify({"productId": product.id })
-      //   });
-        
-      //   if (rawResponse.ok){
-      //     if(rawResponse.data.code !== -1){
-      //       this.setState({ cartLength: this.state.cartLength + 1});
-      //     }else{
-      //       alert("Out of stock!");
-      //     }
-      //   }
-      // })
     }
   }
 
@@ -170,7 +146,8 @@ export default class App extends React.Component {
         console.log("Logout_Response",response.data);
         Cookies.remove('react-cookie-test');
         this.setState({
-          isLoggedIn: false
+          isLoggedIn: false,
+          cartLength: 0
         });
       })
       .catch(function (error) {

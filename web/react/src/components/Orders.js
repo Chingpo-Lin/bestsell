@@ -1,29 +1,33 @@
 import React, { Component } from 'react'
 import formatCurrency from '../util';
 import axios from 'axios';
+import Cookies from 'js-cookie';
 
 export default class Orders extends Component {
     constructor(props){
         super(props);
         this.state = {
-            isOrderPage: false,
-            cartItems: []
+            userInfo:{
+                id:"",
+                name:"",
+                address:"",
+                phone:""
+            }
         }
     }
 
 componentDidMount() {
-    axios.post(global.AppConfig.serverIp + "/pri/order/place_order",
-        {
-         productId: this.props.cartItems.id   
-        },
-         {withCredentials: true})
-    .then((response) => {
-    console.log("place_order",response.data);
-    })
-    .catch(function (error) {
-    console.log("Get_cart_item_Error",error);
-    })
-
+    let session = Cookies.get('react-cookie-test');
+    if(session){
+        let sessionInfo = JSON.parse(session);
+        console.log(sessionInfo);
+        //get categories from server
+        this.setState({userInfo: sessionInfo});
+        console.log(this.state);
+    }
+    else{
+        window.location.href=global.AppConfig.webIp+"/login";
+    }
 }
 
   render() {
@@ -38,29 +42,29 @@ componentDidMount() {
                     <tr>
                         <th>ID</th>
                         <th>DATE</th>
-                        <th>TOTAL</th>
+                        {/* <th>TOTAL</th> */}
                         <th>NAME</th>
-                        <th>EMAIL</th>
+                        <th>Phone</th>
                         <th>ADDRESS</th>
-                        <th>ITEMS</th>
+                        {/* <th>ITEMS</th> */}
                     </tr>
                 </thead>
                 <tbody>
                     {orders.map((order) => (
                         <tr>
-                            <td>{order.id}</td>
-                            <td>{order.createAt}</td>
-                            <td>{formatCurrency(order.total)}</td>
-                            <td>{order.name}</td>
-                            <td>{order.email}</td>
-                            <td>{order.address}</td>
-                            <td>
+                            <td>{this.state.userInfo.id}</td>
+                            <td>{"2022"}</td>
+                            {/* <td>{formatCurrency(order.total)}</td> */}
+                            <td>{this.state.userInfo.name}</td>
+                            <td>{this.state.userInfo.phone}</td>
+                            <td>{this.state.userInfo.address}</td>
+                            {/* <td>
                                 {order.cartItems.map((item) => (
                                     <div>
                                         {item.count} {" x "} {item.name}
                                     </div>
                                 ))}
-                                </td>
+                                </td> */}
                         </tr>
                     ))}
                 </tbody>
