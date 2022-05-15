@@ -123,7 +123,7 @@ public class CartController {
 
         if (cart1 == null) {
 
-            // when no such item in current user's cart
+            // when no such items in current user's cart
             cart.setCount(1);
 
             int num = productService.getProductById(cart1.getProductId()).getStock();
