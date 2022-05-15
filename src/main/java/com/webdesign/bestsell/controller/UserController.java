@@ -134,7 +134,6 @@ public class UserController {
 
         product.setUserId(uid);
         product.setCreateDate(new Date());
-        int row = productService.sell(product);
 
         //save product image to firebase;
         String downloadURL = null;
@@ -148,6 +147,7 @@ public class UserController {
         }
 
         product.setImg(downloadURL);
+        int row = productService.sell(product);
         return JsonData.buildSuccess("success uploaded, URL:  " + downloadURL);
     }
 
