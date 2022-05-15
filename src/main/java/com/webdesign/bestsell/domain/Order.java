@@ -12,7 +12,7 @@ public class Order {
 
     private int productId;
 
-    @JsonFormat(pattern="yyyy-MM-dd hh:mm:ss", locale="zh", timezone = "America/California")
+    @JsonFormat(pattern="yyyy-MM-dd hh:mm:ss", locale="zh", timezone = "America/Los_Angeles")
     private Date createTime;
 
     public Order() {}
