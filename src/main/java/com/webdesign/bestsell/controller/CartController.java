@@ -24,8 +24,8 @@ public class CartController {
     public ProductService productService;
 
     /**
-     * get product in current user's cart
-     * localhost:8080/pri/cart/get_product_in_cart
+     * get cart in current user's cart
+     * localhost:8080/pri/cart/get_cart_by_user
      * @return
      */
     @GetMapping("get_cart_by_user")
@@ -45,6 +45,31 @@ public class CartController {
 //        }
         return JsonData.buildSuccess(cartList);
     }
+
+    /**
+     * get product in current user's cart
+     * localhost:8080/pri/cart/get_product_in_cart
+     * @return
+     */
+    @GetMapping("get_product_in_cart")
+    public JsonData getProductInCart() {
+
+        int uid = LoginInterceptor.currentUserID;
+        if (uid == -1) {
+            return JsonData.buildError("Not looged in");
+        }
+
+        List<Cart> cartList = userService.getCartByUserId(uid);
+
+        List<Product> productList = new ArrayList<>();
+        for (Cart cart: cartList) {
+            int productId = cart.getProductId();
+            productList.add(productService.getProductById(productId));
+        }
+        return JsonData.buildSuccess(productList);
+    }
+
+
 
     /**
      * delete cart by cart id
