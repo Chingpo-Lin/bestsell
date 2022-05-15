@@ -102,6 +102,7 @@ export default class SellProduct extends Component{
             if (response.data.code === 0) {
                 //if post product success, redirect to home page
                 console.log("sell_product_Reponse",response.data);
+                alert("Success!");
                 // window.location.replace(global.AppConfig.webIp+"/");
             }
             else{

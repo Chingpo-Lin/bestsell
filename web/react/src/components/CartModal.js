@@ -42,18 +42,18 @@ export default class CartModal extends Component {
       },
       {withCredentials: true}
     )
-    .then(function (response){
+    .then((response) => {
       console.log("remove_cart_response",response);
+      const removedCount = this.state.cartLength - this.state.cart.find(e => e.productId === product.id).count;
+      this.setState({
+        cartItems:cartItems,
+        cartLength:removedCount
+      })
+      this.props.removeCount(removedCount);
     })
     .catch(function (error){
       console.log("remove_cart_error",error);
     })
-    const removedCount = this.state.cartLength - this.state.cart.find(e => e.productId === product.id).count;
-    this.setState({
-      cartItems:cartItems,
-      cartLength:removedCount
-    })
-    this.props.removeCount(removedCount);
   }
 
   //create new order
@@ -136,24 +136,20 @@ export default class CartModal extends Component {
     });
   };
 
-  CheckOutClear = () => {
-    this.setState({
-      product: null,
-      click: false,
-      cartItems:[],
-      cart:[],
-      cartLength:0
-    });
-    this.props.removeCount(0);
-  }
-
   handleCheckOutButton = () => {
     axios.post(
       global.AppConfig.serverIp+"/pri/order/place_order", {}, {withCredentials: true}
     )
-    .then(function (response){
+    .then((response)  => {
       console.log("place_order_response",response);
-      this.CheckOutClear();
+      this.setState({
+        product: null,
+        click: false,
+        cartItems:[],
+        cart:[],
+        cartLength:0
+      });
+      this.props.removeCount(0);
     })
     .catch(function (error){
       console.log("place_order_error",error);
