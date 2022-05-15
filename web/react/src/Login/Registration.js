@@ -8,7 +8,6 @@ export default class Registration extends Component{
     constructor(props){
         super(props);
         this.state={
-            userID:"",
             phone:"",
             name:"",
             address:"",
@@ -22,8 +21,8 @@ export default class Registration extends Component{
     //signup handler
     signup = (e) =>{
         e.preventDefault();
-        const{ userID, phone, name, address, password, repassword } = this.state;
-        if(!userID||!phone||!name||!address||!password||!repassword){
+        const{ phone, name, address, password, repassword } = this.state;
+        if(!phone||!name||!address||!password||!repassword){
             return this.setState({ error: "Fill all fields!" });
         } else if(repassword !== password){
             return this.setState({ error: "Password and comfirm password does not match" });
@@ -32,7 +31,6 @@ export default class Registration extends Component{
         axios.post(
             global.AppConfig.serverIp+"/pri/user/signup",
             {
-                "id": userID,
                 "phone": phone,
                 "name": name,
                 "address": address,
@@ -66,10 +64,6 @@ export default class Registration extends Component{
                         <div className="signup-wrapper">
                             <h1>Register Account</h1>
                             <form onSubmit = {this.signup}>
-                                <label>
-                                    <p>user ID</p>
-                                    <input type="text" name = "userID" onChange = {this.handleChange}/>
-                                </label>
                                 <label>
                                     <p>Phone</p>
                                     <input type="tel" name = "phone" onChange = {this.handleChange}/>

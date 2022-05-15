@@ -20,7 +20,6 @@ export default class SellProduct extends Component{
     constructor(props){
         super(props);
         this.state={
-            userID:"",
             price:"",
             img:[],
             description:"",
@@ -35,7 +34,6 @@ export default class SellProduct extends Component{
     componentDidMount() {
         let session = Cookies.get('react-cookie-test');
         if(session){
-            let sessionId = JSON.parse(session);
             //get categories from server
             axios.get(global.AppConfig.serverIp+"/pub/category/get_all_category", { withCredentials: true })
             .then((response) => {
@@ -45,9 +43,8 @@ export default class SellProduct extends Component{
                 });
             })
             .catch(function (error) {
-                console.log("Logout_error", error);
+                console.log("get_category_error", error);
             })
-            this.setState({userID:sessionId.id});
         }
         else{
             window.location.href=global.AppConfig.webIp+"/login";
@@ -68,19 +65,18 @@ export default class SellProduct extends Component{
     //sell product handler
     sellProduct = (e) =>{
         e.preventDefault();
-        const{ userID, price, img, description, stock, productName, categoryId } = this.state;
+        const{ price, img, description, stock, productName, categoryId } = this.state;
         if(!price||!img||!description||!stock||!productName||categoryId==="-1"){
             return this.setState({ error: "Fill all fields!" });
         }
         //send sell product request to server
 
         const json = JSON.stringify({
-            "id": userID,
             "price": price,
             "description": description,
             "stock": stock,
             "img":"",
-            "productName":productName,
+            "name":productName,
             "categoryId":categoryId
         });
         const product = new Blob([json], {
@@ -157,7 +153,7 @@ export default class SellProduct extends Component{
                                     <p>Image</p>
                                     <input type="file" name="img" placeholder="Upload an image" onChange={this.uploadPicture}/>
                                 </label>
-                                <img src={this.state.imgPreview} style={{ width: '300px' }}/>
+                                <img src={this.state.imgPreview} style={{ width: '300px' }} alt=""/>
                                 {this.state.error&&(
                                     <div className = "has-text-danger"> { this.state.error }</div>
                                 )}

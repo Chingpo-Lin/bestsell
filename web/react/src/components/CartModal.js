@@ -62,7 +62,7 @@ export default class CartModal extends Component {
     event.preventDefault();
     const order = {
       name: this.state.name,
-      email: this.state.email,
+      phone: this.state.phone,
       address: this.state.address,
       cartItems: this.state.cartItems,
     };
@@ -75,18 +75,21 @@ export default class CartModal extends Component {
       let sessionId = JSON.parse(session);
       this.setState({
         isLoggedIn: true,
-        userId: sessionId.id
+        userId: sessionId.id,
+        name:sessionId.name,
+        phone:sessionId.phone,
+        address:sessionId.address
       })
+    }
+    else{
+      //this will redirect user to login page if not logged in
+      window.location.href=global.AppConfig.webIp+"/login";
     }
     
     //load cart from user
     axios.get(global.AppConfig.serverIp + "/pri/cart/get_cart_by_user", {withCredentials: true})
       .then((response) => {
         console.log("get_cart_by_user_response",response.data);
-        if(!this.state.isLoggedIn){
-          //this will redirect user to login page if not logged in
-          window.location.href=global.AppConfig.webIp+"/login";
-        }
         let sum = 0;
         for (let i = 0; i < response.data.data.length; i++) {
           sum += response.data.data[i].count;
@@ -95,36 +98,36 @@ export default class CartModal extends Component {
           cart: response.data.data,
           cartLength:sum
         })
-        axios.get(global.AppConfig.serverIp + "/pri/cart/get_product_in_cart", {withCredentials: true})
-        .then((response2) => {
-          console.log("get_product_in_cart_response",response2.data);
-          this.setState({
-            cartItems: response2.data.data
-          })
-        })
-        .catch(function (error) {
-          console.log("get_product_in_cart_Error",error);
+      })
+      .catch(function (error) {
+        console.log("get_cart_by_user_Error",error);
+      })
+
+    axios.get(global.AppConfig.serverIp + "/pri/cart/get_product_in_cart", {withCredentials: true})
+      .then((response2) => {
+        console.log("get_product_in_cart_response",response2.data);
+        this.setState({
+          cartItems: response2.data.data
         })
       })
       .catch(function (error) {
-        console.log("Get_cart_Error",error);
+        console.log("get_product_in_cart_Error",error);
       })
 
     axios.get(global.AppConfig.serverIp + "/pri/order/get_total_price", {withCredentials: true})
       .then((response) => {
-        console.log("get_total_price",response.data);
+        console.log("get_total_price_response",response.data);
         this.setState({
           totalPrice: response.data.data
         })
       })
       .catch(function (error) {
-        console.log("get_total_price",error);
+        console.log("get_total_price_error",error);
       })
   }
 
   openModal = (product) => {
     this.setState({product, click: true});
-    // this.setState({cartItems: this.state.cartItems});
   };
 
   closeModal = () => {
@@ -134,6 +137,7 @@ export default class CartModal extends Component {
       cartItems:[],
       cart:[],
       cartLength:0,
+      showCheckout: false,
       orderSuccessful:false
     });
   };
@@ -160,11 +164,10 @@ export default class CartModal extends Component {
   }
 
   render() {
-      const {product} = this.state;
-      const {click} = this.state;
-      const {cartItems} = this.state;
-      console.log("cartItems in CartModal: ", cartItems);
-      // console.log("cartItems",cartItems);
+    const {product} = this.state;
+    const {click} = this.state;
+    const {cartItems} = this.state;
+    console.log("cartItems in CartModal: ", cartItems);
     return (
       <div>
         <div className='cart-icon'>
@@ -253,30 +256,19 @@ export default class CartModal extends Component {
                   <Fade right cascade>
                   <div className="cart">
                   <form onSubmit={this.createOrder}>
+                    <p>Check your information</p>
                     <ul className="form-container">
                       <li>
                         <label>Phone</label>
-                        <input
-                        name="email"
-                        type="email" 
-                         
-                        onChange={this.handleInput} />
+                        <p>{this.state.phone}</p>
                       </li>
                       <li>
                         <label>Name</label>
-                        <input 
-                        name="name"
-                        type="text" 
-                         
-                        onChange={this.handleInput} />
+                        <p>{this.state.name}</p>
                       </li>
                       <li>
                         <label>Address</label>
-                        <input 
-                        name="address"
-                        type="text" 
-                         
-                        onChange={this.handleInput} />
+                        <p>{this.state.address}</p>
                       </li>
                       <li>
                         <button className='proceed button' onClick={this.handleCheckOutButton} >check out</button>
