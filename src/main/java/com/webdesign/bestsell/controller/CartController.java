@@ -126,6 +126,11 @@ public class CartController {
             // when no such item in current user's cart
             cart.setCount(1);
 
+            int num = productService.getProductById(cart1.getProductId()).getStock();
+            if (num < 1) {
+                return JsonData.buildError("no stock left");
+            }
+
             int row = userService.addToCart(cart);
             return JsonData.buildSuccess(row);
         } else {
