@@ -46,7 +46,7 @@ export default class App extends React.Component {
     //load cart from user & check login status
     axios.get(global.AppConfig.serverIp + "/pri/cart/get_cart_by_user", {withCredentials: true})
       .then((response) => {
-        console.log("get_cart_by_user",response.data);
+        console.log("get_cart_by_user_response",response.data);
         if(response.data.code === -1){
           if(session){
             Cookies.remove('react-cookie-test');
@@ -55,11 +55,18 @@ export default class App extends React.Component {
             })
           }
         }
-        this.setState({
-          cartLength:response.data.data.length,
-        })})
+        else{
+          let sum = 0;
+          for (let i = 0; i < response.data.data.length; i++) {
+            sum += response.data.data[i].count;
+          }
+          this.setState({
+            cartLength:sum,
+          })
+        }
+      })
       .catch(function (error) {
-        console.log("Get_cart_Error",error);
+        console.log("Get_cart_by_user_Error",error);
       })
   }
 
@@ -170,7 +177,8 @@ export default class App extends React.Component {
         console.log("Logout_Response",response.data);
         Cookies.remove('react-cookie-test');
         this.setState({
-          isLoggedIn: false
+          isLoggedIn: false,
+          cartLength: 0
         });
       })
       .catch(function (error) {
