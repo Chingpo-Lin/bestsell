@@ -8,8 +8,8 @@ import Cookies from 'js-cookie';
 
 export default class CartModal extends Component {
     constructor(props){
-        super(props);
-        this.state = {
+      super(props);
+      this.state = {
         product: null,
         name:"",
         email:"",
@@ -22,8 +22,9 @@ export default class CartModal extends Component {
         cartLength:0,
         order:[],
         totalPrice:0,
-        cart:[]};
-    }   
+        cart:[]
+      };
+    }
 
   //assign the input info to the corresponding attributes
   handleInput = (event) =>{
@@ -54,10 +55,6 @@ export default class CartModal extends Component {
     })
     this.props.removeCount(removedCount);
   }
-
-  // createOrder = () => {
-    
-  // }
 
   //create new order
   createOrder = (event) =>{
@@ -130,14 +127,38 @@ export default class CartModal extends Component {
   };
 
   closeModal = () => {
-      this.setState({
-        product: null,
-        click: false,
-        cartItems:[],
-        cart:[],
-        cartLength:0
-      });
+    this.setState({
+      product: null,
+      click: false,
+      cartItems:[],
+      cart:[],
+      cartLength:0
+    });
   };
+
+  CheckOutClear = () => {
+    this.setState({
+      product: null,
+      click: false,
+      cartItems:[],
+      cart:[],
+      cartLength:0
+    });
+    this.props.removeCount(0);
+  }
+
+  handleCheckOutButton = () => {
+    axios.post(
+      global.AppConfig.serverIp+"/pri/order/place_order", {}, {withCredentials: true}
+    )
+    .then(function (response){
+      console.log("place_order_response",response);
+      this.CheckOutClear();
+    })
+    .catch(function (error){
+      console.log("place_order_error",error);
+    })
+  }
 
   render() {
       const {product} = this.state;
@@ -235,11 +256,11 @@ export default class CartModal extends Component {
                   <form onSubmit={this.createOrder}>
                     <ul className="form-container">
                       <li>
-                        <label>Email</label>
-                        <input 
+                        <label>Phone</label>
+                        <input
                         name="email"
                         type="email" 
-                        required 
+                         
                         onChange={this.handleInput} />
                       </li>
                       <li>
@@ -247,7 +268,7 @@ export default class CartModal extends Component {
                         <input 
                         name="name"
                         type="text" 
-                        required 
+                         
                         onChange={this.handleInput} />
                       </li>
                       <li>
@@ -255,15 +276,11 @@ export default class CartModal extends Component {
                         <input 
                         name="address"
                         type="text" 
-                        required 
+                         
                         onChange={this.handleInput} />
                       </li>
                       <li>
-                        <a href= {window.location.href=global.AppConfig.webIp+"/Orders"}
-                            >
-                        <button className="checkout button" type="submit">
-                          Checkout
-                        </button></a>
+                        <button className='proceed button' onClick={this.handleCheckOutButton} >check out</button>
                       </li>
                     </ul>
                   </form>
