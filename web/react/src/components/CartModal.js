@@ -22,6 +22,7 @@ export default class CartModal extends Component {
         cartLength:0,
         order:[],
         totalPrice:0,
+        orderSuccessful:false,
         cart:[]
       };
     }
@@ -132,7 +133,8 @@ export default class CartModal extends Component {
       click: false,
       cartItems:[],
       cart:[],
-      cartLength:0
+      cartLength:0,
+      orderSuccessful:false
     });
   };
 
@@ -147,7 +149,8 @@ export default class CartModal extends Component {
         click: false,
         cartItems:[],
         cart:[],
-        cartLength:0
+        cartLength:0,
+        orderSuccessful:true
       });
       this.props.removeCount(0);
     })
@@ -288,7 +291,22 @@ export default class CartModal extends Component {
         </div>
             </Zoom>
           </Modal>
+        ) }
+
+        {this.state.orderSuccessful &&
+         (<Modal
+          isOpen={true}
+          aria-labelledby="contained-modal-title-vcenter"
+          onRequestClose={this.closeModal}
+            width={"100rem"}>
+            <h1 className='order-successful'>Order Successful!</h1>
+            <img className='successImg' src='../images/trueimg.png' alt='success'></img>
+            <button className="close-modal" onClick={this.closeModal}>
+                x
+              </button>
+        </Modal>
         )}
+        
       </div>
     )
   }
