@@ -126,7 +126,7 @@ public class CartController {
             // when no such items in current user's cart
             cart.setCount(1);
 
-            int num = productService.getProductById(cart1.getProductId()).getStock();
+            int num = productService.getProductById(cart.getProductId()).getStock();
             if (num < 1) {
                 return JsonData.buildError("no stock left");
             }
