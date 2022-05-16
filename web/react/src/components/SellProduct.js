@@ -115,7 +115,7 @@ export default class SellProduct extends Component{
         return(
             <div className="grid-container">
                 <header>
-                    <a href="/">React Shopping Cart</a>
+                    <a href="/">BestSell</a>
                 </header>
                 <main>
                     <div id="signup-outer">

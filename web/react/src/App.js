@@ -27,8 +27,10 @@ export default class App extends React.Component {
   componentDidMount() {
     let session = Cookies.get('react-cookie-test');
     if(session){
+      let sessionId = JSON.parse(session);
       this.setState({
-        isLoggedIn: true
+        isLoggedIn: true,
+        username:sessionId.name
       })
     }
 
@@ -106,6 +108,17 @@ export default class App extends React.Component {
     }
   }
 
+  styles = theme => ({
+    badge: {
+      top: '50%',
+      right: -3,
+      // The border color match the background color.
+      border: `2px solid ${
+        theme.palette.type === 'light' ? theme.palette.grey[200] : theme.palette.grey[900]
+      }`,
+    },
+  });
+
   //sort products in order of latest, lowest and highest
   sortProducts = (event) => {
     const sort = event.target.value;
@@ -124,6 +137,7 @@ export default class App extends React.Component {
 
   //filter products in order of sizes
   filterProducts = (event) => {
+    console.log("products", this.state.products);
     console.log(event.target.value);
     if(event.target.value === ""){
       this.setState({size: event.target.value, products:this.state.products});
@@ -131,9 +145,10 @@ export default class App extends React.Component {
       this.setState ({
         size: event.target.value,
           products: this.state.products.filter( // filter array
-          (product) => product.availableSizes.indexOf(event.target.value) >= 0
+          (product) => product.categoryId >= event.target.value
           ),
       });
+
     }
   };
 
@@ -164,41 +179,64 @@ export default class App extends React.Component {
     console.log("cart items: ", this.state.cartItems)
     return (
       <div className="grid-container">
-         <header>
-            <a href="/">React Shopping Cart</a>
-            <button className='loginButton' 
-            onClick={this.handleAuthButton}>{this.state.isLoggedIn ? "logout" : "login"}</button>
-             <div className='cart-icon'>
-             {this.state.cartLength === 0? ( 
-            <div className="cart-header">Cart is empty</div>
-        ) : (
-            <div className="cart-header">
-                You have {this.state.cartLength} items in the cart{" "}
-            </div>
-        )}
-            </div>
-            <div className="sidebar">
-                <CartModal 
-                  createOrder={this.createOrder}
-                  removeCount={this.removeCount}
-                  />
+        <header>
+          <a href="/">BestSell</a>
+          {this.state.isLoggedIn ? (
+            <>
+            <div className='cart-icon'>
+            {this.state.cartLength === 0? ( 
+              <div className="cart-header">Cart is empty</div>
+            ) : (
+              <div className="cart-header">
+                  You have {this.state.cartLength} items in the cart{" "}
               </div>
-          </header>
-          <main> 
-            <div className="content">
-              <div className="main">
-                <Filter count={this.state.products.length} 
-                  size={this.state.size}
-                  sort={this.state.sort}
-                  filterProducts={this.filterProducts}
-                  sortProducts={this.sortProducts} />
-                <Products products={this.state.products} 
-                          addToCart={this.addToCart}
-                          isLoggedIn={this.state.isLoggedIn} />
+            )}
+          </div>
+          <div className="sidebar">
+            <CartModal 
+              createOrder={this.createOrder}
+              removeCount={this.removeCount}
+            />
+          </div>
+          {/* <Badge color="secondary" badgeContent={this.state.cartLength} classes={{ badge: classes.badge }}>
+          <div className="sidebar">
+            <CartModal 
+              createOrder={this.createOrder}
+              removeCount={this.removeCount}
+            />
+          </div>
+          </Badge> */}
+            <div className="navbar">
+              <div className="dropdown">
+                <button className="dropbtn"> {this.state.username}
+                  <i className="fa fa-caret-down"></i>
+                </button>
+                <div className="dropdown-content">
+                  <a href="/Sell">Sell Product</a>
+                  <button onClick={this.handleAuthButton}>Logout</button>
+                </div>
               </div>
-            </div> 
-          </main>
-          <footer>All right is reserved.</footer>
+            </div>
+            </>
+          ) : (
+            <button className='loginButton' onClick={this.handleAuthButton}>login</button>
+          )}
+        </header>
+        <main> 
+          <div className="content">
+            <div className="main">
+              <Filter count={this.state.products.length} 
+                size={this.state.size}
+                sort={this.state.sort}
+                filterProducts={this.filterProducts}
+                sortProducts={this.sortProducts} />
+              <Products products={this.state.products} 
+                        addToCart={this.addToCart}
+                        isLoggedIn={this.state.isLoggedIn} />
+            </div>
+          </div> 
+        </main>
+        <footer>All right is reserved.</footer>
       </div>
    );
   }

@@ -52,7 +52,7 @@ export default class Login extends Component{
         return(
             <div className="grid-container">
                 <header>
-                    <a href="/">React Shopping Cart</a>
+                    <a href="/">BestSell</a>
                 </header>
                 <main>
                     <div id="login-outer">
