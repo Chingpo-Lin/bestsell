@@ -6,12 +6,14 @@ import Cookies from 'js-cookie';
 import Products from "./components/Products";
 import Filter from './components/Filter';
 import CartModal from './components/CartModal';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
 export default class App extends React.Component {
   //create several attributes of state in a constructor
   constructor(){
     super();
     this.state = {
+      allProducts:[],
       products:[],
       // localStorage.getItem("cartItems")?
       //   JSON.parse(localStorage.getItem("cartItems")):[],
@@ -20,6 +22,9 @@ export default class App extends React.Component {
       isLoggedIn: false,
       username:"",
       cartLength: 0,
+      showDialog: false,
+      dialogMessage:"",
+      allCategories:[]
     };
   }
 
@@ -38,7 +43,8 @@ export default class App extends React.Component {
       .then((response) => {
         console.log("List_All_Products_Response",response.data);
         this.setState({
-          products:response.data.data
+          products:response.data.data,
+          allProducts: response.data.data
         })
       })
       .catch(function (error) {
@@ -70,6 +76,18 @@ export default class App extends React.Component {
       .catch(function (error) {
         console.log("Get_cart_by_user_Error",error);
       })
+
+      //get categories from server
+      axios.get(global.AppConfig.serverIp+"/pub/category/get_all_category", { withCredentials: true })
+      .then((response) => {
+          console.log("get_category_Response",response.data);
+          this.setState({
+              allCategories:response.data.data
+          });
+      })
+      .catch(function (error) {
+          console.log("get_category_error", error);
+      })
   }
 
   createOrder = (order) => {
@@ -96,7 +114,10 @@ export default class App extends React.Component {
       .then((response) => {
         console.log("add_cart_response",response);
         if(response.data.code < 0){
-          alert("Out of stock!");
+          this.setState({dialogMessage:response.data.msg, showDialog:true});
+          setTimeout(()=>{
+            this.setState({showDialog:false});
+          }, 3000);
         }
         else{
           this.setState({ cartLength: this.state.cartLength+1 });
@@ -137,18 +158,20 @@ export default class App extends React.Component {
 
   //filter products in order of sizes
   filterProducts = (event) => {
-    console.log("products", this.state.products);
-    console.log(event.target.value);
     if(event.target.value === ""){
-      this.setState({size: event.target.value, products:this.state.products});
+      this.setState({
+        size: event.target.value,
+        products: this.state.allProducts,
+        sort: ""});
     } else{
+      let products = this.state.allProducts;
       this.setState ({
         size: event.target.value,
-          products: this.state.products.filter( // filter array
-          (product) => product.categoryId >= event.target.value
-          ),
+        sort: "",
+        products: products.filter( // filter array
+          (product) => product.categoryId === parseInt(event.target.value)
+        )
       });
-
     }
   };
 
@@ -166,7 +189,7 @@ export default class App extends React.Component {
         });
       })
       .catch(function (error) {
-          console.log("Logout_error", error);
+        console.log("Logout_error", error);
       })
     }
     else{
@@ -175,10 +198,15 @@ export default class App extends React.Component {
   }
 
   render(){
-    console.log("cart: ", this.state.cart)
-    console.log("cart items: ", this.state.cartItems)
     return (
       <div className="grid-container">
+        {this.state.showDialog ? (
+          <dialog id="errorDialog" open>
+            <h3>{this.state.dialogMessage}</h3>
+          </dialog>
+        ):(
+          <></>
+        )}
         <header>
           <a href="/">BestSell</a>
           {this.state.isLoggedIn ? (
@@ -213,7 +241,7 @@ export default class App extends React.Component {
                 </button>
                 <div className="dropdown-content">
                   <a href="/Sell">Sell Product</a>
-                  <button onClick={this.handleAuthButton}>Logout</button>
+                  <button className="logout-button" onClick={this.handleAuthButton}><ExitToAppIcon fontSize="medium"/> Logout</button>
                 </div>
               </div>
             </div>
@@ -228,6 +256,7 @@ export default class App extends React.Component {
               <Filter count={this.state.products.length} 
                 size={this.state.size}
                 sort={this.state.sort}
+                category={this.state.allCategories}
                 filterProducts={this.filterProducts}
                 sortProducts={this.sortProducts} />
               <Products products={this.state.products} 

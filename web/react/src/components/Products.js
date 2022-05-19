@@ -30,15 +30,16 @@ export default class Products extends Component {
             {this.props.products.map(product => (
                 <li key={product.id}>
                     <div className="product">
-                        <a href={"#" + product.id} onClick={() => this.openModal(product)}>
+                       <div className="productLink">
+                          <a href={"#" + product.id} onClick={() => this.openModal(product)}>
                             <img src={product.img} alt={product.name}  className="img" />
-                            <p>
-                                {product.name}
-                            </p>
-                        </a>
+                            <h3>{product.name}</h3>
+                          </a>
+                        </div>
                         <div className="product-price">
-                            <div>{formatCurrency(product.price)}</div>
-                            <button onClick={()=> this.props.addToCart(product)} className="button primary">Add to Cart</button>
+  
+                          <div>{formatCurrency(product.price)}</div>
+                          {/* <button onClick={()=> this.props.addToCart(product)} className="button primary">Add to Cart</button> */}
                         </div>
                     </div>
                 </li>
@@ -55,20 +56,23 @@ export default class Products extends Component {
               <div className="product-details">
                 <img src={product.img} alt={product.name} />
                 <div className="product-details-description">
-                  <p>
+                  <h1>
                     <strong>{product.name}</strong>
-                  </p>
-                  <p>
+                  </h1>
+                  <h3>
                     {product.description}
-                  </p>
+                  </h3>
+                  <h3>
+                    stock: {product.stock}
+                  </h3>
                   <div className="product-price">
-                      <div>{formatCurrency(product.price)}</div>
-                      <button className="button primary" onClick={() => {
-                        this.props.addToCart(product);
-                        this.closeModal();
-                      }}> Add To Cart</button>
-                  </div>    
-                  </div>  
+                    <div>{formatCurrency(product.price)}</div>
+                    <button className="button primary" onClick={() => {
+                      this.props.addToCart(product);
+                      this.closeModal();
+                    }}> Add To Cart</button>
+                  </div>
+                </div>
               </div>
             </Zoom>
           </Modal>

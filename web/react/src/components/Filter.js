@@ -15,13 +15,12 @@ export default class Filter extends Component {
           <div className="filter-size">
             Filter{" "}
             <select value={this.props.size} onChange={this.props.filterProducts}>
-              <option value="">All</option>
-              <option value="2">XS</option>
-              <option value="1">S</option>
-              <option value="M">M</option> 
-              <option value="L">L</option> 
-              <option value="XL">XL</option>
-              <option value="XXL">XXL</option>              
+            <option value="">All</option>
+            {this.props.category.map(categories => {
+              return (
+                <option value={categories.id}> {categories.name} </option>
+              )
+            })}        
             </select>              
           </div>
       </div>

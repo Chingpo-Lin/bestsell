@@ -27,7 +27,8 @@ export default class SellProduct extends Component{
             productName:"",
             categoryId:"-1",
             allCategories:[],
-            imgPreview:""
+            imgPreview:"",
+            showDialog:false
         };
     }
 
@@ -98,8 +99,10 @@ export default class SellProduct extends Component{
             if (response.data.code === 0) {
                 //if post product success, redirect to home page
                 console.log("sell_product_Reponse",response.data);
-                alert("Success!");
-                // window.location.replace(global.AppConfig.webIp+"/");
+                this.setState({showDialog:true});
+                setTimeout(function(){
+                    window.location.href = global.AppConfig.webIp+"/";
+                 }, 5000);
             }
             else{
                 return this.setState({ error: response.data.msg });
@@ -114,6 +117,13 @@ export default class SellProduct extends Component{
         console.log("image",this.state.img);
         return(
             <div className="grid-container">
+                {this.state.showDialog ? (
+                    <dialog id="sellDialog" open>
+                        <p>Success! The product has been posted.</p>
+                    </dialog>
+                ):(
+                    <></>
+                )}
                 <header>
                     <a href="/">BestSell</a>
                 </header>
@@ -153,6 +163,7 @@ export default class SellProduct extends Component{
                                     <p>Image</p>
                                     <input type="file" name="img" placeholder="Upload an image" onChange={this.uploadPicture}/>
                                 </label>
+                                <br/>
                                 <img src={this.state.imgPreview} style={{ width: '300px' }} alt=""/>
                                 {this.state.error&&(
                                     <div className = "has-text-danger"> { this.state.error }</div>
@@ -160,6 +171,7 @@ export default class SellProduct extends Component{
                                 <div id="submit">
                                     <button>Submit</button>
                                 </div>
+                                <br/>
                             </form>
                         </div>
                     </div>

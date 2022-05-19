@@ -60,7 +60,7 @@ export default class Login extends Component{
                             <h1>Please Log In</h1>
                             <form onSubmit = {this.login}>
                                 <label>
-                                    <p>Username</p>
+                                    <p>Phone</p>
                                     <input type="text" name = "username" onChange = {this.handleChange}/>
                                 </label>
                                 <label>
