@@ -44,6 +44,29 @@ public class OrderController {
     }
 
     /**
+     * get product in current user's order
+     * localhost:8080/pri/cart/get_product_in_cart
+     * @return
+     */
+    @GetMapping("get_product_in_order_history")
+    public JsonData getProductInOrderHistory() {
+
+        int uid = LoginInterceptor.currentUserID;
+        if (uid == -1) {
+            return JsonData.buildError("Not looged in");
+        }
+
+        List<Order> orderList = userService.getAllOrderByUserId(uid);
+
+        List<Product> productList = new ArrayList<>();
+        for (Order order: orderList) {
+            int productId = order.getProductId();
+            productList.add(productService.getProductById(productId));
+        }
+        return JsonData.buildSuccess(productList);
+    }
+
+    /**
      * place order
      * localhost:8080/pri/order/place_order
      * @return
