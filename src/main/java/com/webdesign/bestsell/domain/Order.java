@@ -3,6 +3,7 @@ package com.webdesign.bestsell.domain;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.util.Date;
+import java.util.TimeZone;
 
 public class Order {
 
@@ -12,8 +13,7 @@ public class Order {
 
     private int productId;
 
-//    @JsonFormat(pattern="yyyy-MM-dd hh:mm:ss", locale="en", timezone = "PST")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd hh:mm:ss", locale="en", timezone = "PST")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd hh:mm:ss", locale="en", timezone = "America/Los_Angeles")
     private Date createTime;
 
     private Integer count;
