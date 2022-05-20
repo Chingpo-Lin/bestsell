@@ -15,12 +15,22 @@ public class Order {
     @JsonFormat(pattern="yyyy-MM-dd hh:mm:ss", locale="zh", timezone = "America/Los_Angeles")
     private Date createTime;
 
+    private Integer count;
+
     public Order() {}
 
     public Order(int userId, int productId) {
         this.userId = userId;
         this.productId = productId;
         createTime = new Date();
+    }
+
+    public Integer getCount() {
+        return count;
+    }
+
+    public void setCount(Integer count) {
+        this.count = count;
     }
 
     public int getId() {
@@ -62,6 +72,7 @@ public class Order {
                 ", userId=" + userId +
                 ", productId=" + productId +
                 ", createTime=" + createTime +
+                ", count=" + count +
                 '}';
     }
 }

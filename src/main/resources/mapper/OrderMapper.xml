@@ -12,6 +12,7 @@
         <result column="user_id" property="userId" jdbcType="INTEGER"/>
         <result column="product_id" property="productId" jdbcType="INTEGER"/>
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="count" property="count" jdbcType="INTEGER"/>
     </resultMap>
 
     <select id="getOrderByUserId" resultMap="OrderResultMap">
@@ -20,8 +21,9 @@
 
     <insert id="placeOrder" parameterType="Order" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
 
-        INSERT INTO `order` (`user_id`, `product_id`, `create_time`)
-        VALUES (#{userId,jdbcType=INTEGER}, #{productId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP});
+        INSERT INTO `order` (`user_id`, `product_id`, `create_time`, `count`)
+        VALUES (#{userId,jdbcType=INTEGER}, #{productId,jdbcType=INTEGER},
+                #{createTime,jdbcType=TIMESTAMP}, #{count,jdbcType=INTEGER});
 
     </insert>
 

@@ -90,15 +90,16 @@ public class OrderController {
             order.setUserId(uid);
             order.setProductId(productId);
             order.setCreateTime(new Date());
+            order.setCount(cart.getCount());
 
             // if there is items left
             Product product = productService.getProductById(productId);
-            if (product.getStock() <= 0) {
+            if (product.getStock() < order.getCount()) {
                 return JsonData.buildError("no item left!");
             }
 
             // update items stock
-            product.setStock(product.getStock() - 1);
+            product.setStock(product.getStock() - order.getCount());
             int row = productService.updateStock(product);
             if (row <= 0) {
                 return JsonData.buildError("error when attempt to get item");
