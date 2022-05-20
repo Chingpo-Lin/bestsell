@@ -12,7 +12,8 @@ public class Order {
 
     private int productId;
 
-    @JsonFormat(pattern="yyyy-MM-dd hh:mm:ss", locale="zh", timezone = "America/Los_Angeles")
+//    @JsonFormat(pattern="yyyy-MM-dd hh:mm:ss", locale="en", timezone = "PST")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd hh:mm:ss", locale="en", timezone = "PST")
     private Date createTime;
 
     private Integer count;

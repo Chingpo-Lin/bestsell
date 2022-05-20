@@ -164,7 +164,7 @@ public class UserController {
             return JsonData.buildError("Not looged in");
         }
         List<Product> productList = productService.getProductByUserId(uid);
-        System.out.println(productList);
+//        System.out.println(productList);
         return JsonData.buildSuccess(productList);
     }
 
@@ -177,7 +177,7 @@ public class UserController {
     public JsonData listUser() {
 
         List<User> userList = userService.listUser();
-        System.out.println(userList);
+//        System.out.println(userList);
         return JsonData.buildSuccess(userList);
     }
 }

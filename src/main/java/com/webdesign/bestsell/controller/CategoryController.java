@@ -26,7 +26,7 @@ public class CategoryController {
     @GetMapping("get_all_category")
     public JsonData getAllCategory() {
         List<Category> categoryList = productService.getAllCategory();
-        System.out.println(categoryList);
+//        System.out.println(categoryList);
         return JsonData.buildSuccess(categoryList);
     }
 }

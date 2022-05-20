@@ -28,7 +28,7 @@ public class ProductController {
     @GetMapping("list_all_product")
     public JsonData listAllProduct() {
         List<Product> productList = productService.listProduct(false);
-        System.out.println(productList);
+//        System.out.println(productList);
         return JsonData.buildSuccess(productList);
     }
 
@@ -40,7 +40,7 @@ public class ProductController {
     @GetMapping("list_product_on_sell")
     public JsonData listProductOnSell() {
         List<Product> productList = productService.listProduct(true);
-        System.out.println(productList);
+//        System.out.println(productList);
         return JsonData.buildSuccess(productList);
     }
 
@@ -52,9 +52,9 @@ public class ProductController {
      */
     @GetMapping("list_product_by_category_id")
     public JsonData listProductByCategoryId(int categoryId) {
-        System.out.println(categoryId);
+//        System.out.println(categoryId);
         List<Product> productList = productService.getProductByCategoryId(categoryId);
-        System.out.println(productList);
+//        System.out.println(productList);
         return JsonData.buildSuccess(productList);
 
     }
@@ -66,9 +66,9 @@ public class ProductController {
      */
     @GetMapping("get_product_by_id")
     public JsonData getProductById(Integer productId) {
-        System.out.println("debugddd:" + productId);
+//        System.out.println("debugddd:" + productId);
         Product product = productService.getProductById(productId);
-        System.out.println(product);
+//        System.out.println(product);
         return JsonData.buildSuccess(product);
     }
 

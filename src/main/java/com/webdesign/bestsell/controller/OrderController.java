@@ -39,7 +39,7 @@ public class OrderController {
         }
 
         List<Order> orderList = userService.getAllOrderByUserId(uid);
-        System.out.println(orderList);
+//        System.out.println(orderList);
         return JsonData.buildSuccess(orderList);
     }
 

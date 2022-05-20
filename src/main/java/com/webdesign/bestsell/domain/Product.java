@@ -19,7 +19,8 @@ public class Product {
 
     private String description;
 
-    @JsonFormat(pattern="yyyy-MM-dd hh:mm:ss", locale="zh", timezone = "GMT+8")
+//    @JsonFormat(pattern="yyyy-MM-dd hh:mm:ss", locale="en", timezone = "PST")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd hh:mm:ss", locale="en", timezone = "PST")
     private Date createDate;
 
     private Integer stock;
