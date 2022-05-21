@@ -399,6 +399,7 @@ input{
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
   z-index: 1;
   right:0;
+  margin-top: 18px;
 }
 
 /* Links inside the dropdown */
@@ -440,4 +441,61 @@ input{
 /* Show the dropdown menu on hover */
 .dropdown:hover .dropdown-content {
   display: block;
+}
+
+/* History page */
+.historyButton{
+  display: flex;
+
+}
+.historyButton button:hover{
+  color: #ff8000;
+}
+.historyButton button{
+  cursor: pointer;
+  background: transparent;
+  align-items: flex-end;
+  border: 0; 
+  color:#ffffff;
+  padding: 10px;
+  margin-left: 20px;
+ }
+.History{
+  display: flex;
+  flex-direction: column;
+}
+.ItemsInHistory{
+  display: flex;
+  flex-direction: column;
+}
+.ItemsInHistory li{
+  display: flex;
+  padding: 2rem;
+}
+.ItemsInHistory div{
+  padding: 1rem;
+}
+.order2{
+  display: flex;
+  flex-direction: column;
+  right: 5%;
+  align-items: flex-end;
+}
+.order1{
+  display: flex;
+}
+.ItemsInHistory2{
+  display: flex;
+  flex-direction: column;
+}
+.ItemsInHistory2 li{
+  display: flex;
+  padding: 2rem;
+  justify-content: space-between;
+  margin-bottom: 5.2rem;
+}
+.ItemsInHistory2 div{
+  padding-right: 5rem;
+  padding-bottom: 1rem;
+  padding-top: 1rem;
 }

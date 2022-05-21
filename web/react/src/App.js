@@ -241,7 +241,10 @@ export default class App extends React.Component {
                 </button>
                 <div className="dropdown-content">
                   <a href="/Sell">Sell Product</a>
-                  <button className="logout-button" onClick={this.handleAuthButton}><ExitToAppIcon fontSize="medium"/> Logout</button>
+                  <a href="/History">Order{" & "}Sell History</a>
+                  <button className="logout-button" onClick={this.handleAuthButton}>
+                    <ExitToAppIcon fontSize="medium"/> 
+                    Logout</button>
                 </div>
               </div>
             </div>
