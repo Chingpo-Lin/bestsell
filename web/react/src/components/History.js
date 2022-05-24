@@ -95,7 +95,9 @@ export default class History extends Component {
           </div>
         </header>
         <div className='History'>
+          <div className='historyTitle'>
             {this.state.sellHistory ? (<div>Sell History</div>):(<div>Order History</div>)}
+            </div>
             <div className='order1'>
             <ul className='ItemsInHistory'>
                 {this.state.sellHistory && (this.state.sellProducts.map(item =>(
@@ -129,26 +131,28 @@ export default class History extends Component {
                             </div>
                             <div>Name:{" "}{item.name}</div>
                             <div>Price:{" $"}{item.price}</div>
-                            <div>Description:{" "}{item.description}</div>
+                            <div>Count:{" "}{item.count}</div>
+                            <div>Create Date:{" "}{item.createTime}</div>
+                            {/* <div>Description:{" "}{item.description}</div> */}
                         {/* </li> */}
                         {/* <div>Stock:{" "}{item.stock}</div> */}
                     </li>
                     )))} 
                     </ul>
-                    <div className='order2'>
+                    {/* <div className='order2'>
                     <ul className='ItemsInHistory2'>
                     {this.state.orderHistory && (
                         this.state.order.map(item => (
                             <li key={item.id}>
                                 <div>Count:{" "}{item.count}</div>
                                 <div>Create Date:{" "}{item.createTime}</div>
-                                {/* <div>Description:{" "}{product.description}</div> */}
+                                <div>Description:{" "}{product.description}</div>
                             </li>
                         )) 
                     )
                     }
                     </ul>
-                    </div>
+                    </div> */}
             
             </div>
         </div>

@@ -463,39 +463,33 @@ input{
 .History{
   display: flex;
   flex-direction: column;
+  justify-content: center;
+}
+.historyTitle{
+  padding: 2rem;
+  display: flex;
+  justify-content: center;
+  font-size: large;
+  left: 10%;
 }
 .ItemsInHistory{
   display: flex;
+  justify-content: center;
   flex-direction: column;
+  text-align: left;
 }
 .ItemsInHistory li{
   display: flex;
-  padding: 2rem;
+  justify-content: space-between;
+  padding-bottom: 3rem;
+  padding-top: 1rem;
 }
 .ItemsInHistory div{
   padding: 1rem;
 }
-.order2{
-  display: flex;
-  flex-direction: column;
-  right: 5%;
-  align-items: flex-end;
-}
+
 .order1{
   display: flex;
+  justify-content: center;
 }
-.ItemsInHistory2{
-  display: flex;
-  flex-direction: column;
-}
-.ItemsInHistory2 li{
-  display: flex;
-  padding: 2rem;
-  justify-content: space-between;
-  margin-bottom: 5.2rem;
-}
-.ItemsInHistory2 div{
-  padding-right: 5rem;
-  padding-bottom: 1rem;
-  padding-top: 1rem;
-}
+
