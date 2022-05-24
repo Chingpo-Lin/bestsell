@@ -56,22 +56,19 @@ public class OrderController {
     @GetMapping("get_product_in_order_history")
     public JsonData getProductInOrderHistory() {
 
-        int uid = 19;
-
-//        int uid = LoginInterceptor.currentUserID;
-//        if (uid == -1) {
-//            return JsonData.buildError("Not looged in");
-//        }
+        int uid = LoginInterceptor.currentUserID;
+        if (uid == -1) {
+            return JsonData.buildError("Not looged in");
+        }
 
         List<Order> orderList = userService.getAllOrderByUserId(uid);
 
         List<OrderDisplay> orderDisplayList = new ArrayList<>();
-        OrderDisplay orderDisplay;
         for (Order order: orderList) {
             int productId = order.getProductId();
             Product product = productService.getProductById(productId);
 
-            orderDisplay = new OrderDisplay();
+            OrderDisplay orderDisplay = new OrderDisplay();
 
             orderDisplay.setCount(order.getCount());
             orderDisplay.setCreateTime(order.getCreateTime());
