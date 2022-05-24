@@ -25,8 +25,6 @@ public class LoginInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
-        // TODO
-        // check if user in session
         String sessionId = "Default";
         Cookie[] cookies = request.getCookies();
         if (cookies == null) {

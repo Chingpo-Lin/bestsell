@@ -3,6 +3,7 @@ package com.webdesign.bestsell.controller;
 import com.webdesign.bestsell.domain.Cart;
 import com.webdesign.bestsell.domain.Order;
 import com.webdesign.bestsell.domain.Product;
+import com.webdesign.bestsell.domain.model.OrderDisplay;
 import com.webdesign.bestsell.interceptor.LoginInterceptor;
 import com.webdesign.bestsell.service.ProductService;
 import com.webdesign.bestsell.service.UserService;
@@ -28,9 +29,13 @@ public class OrderController {
     /**
      * get order of given user
      * localhost:8080/pri/order/get_user_order
+     * don't use it, will delete soon
+     * don't use it, will delete soon
+     * don't use it, will delete soon
      * @return
      */
     @GetMapping("get_user_order")
+    @Deprecated
     public JsonData getOrderByUserId() {
 
         int uid = LoginInterceptor.currentUserID;
@@ -39,7 +44,7 @@ public class OrderController {
         }
 
         List<Order> orderList = userService.getAllOrderByUserId(uid);
-//        System.out.println(orderList);
+        System.out.println(orderList);
         return JsonData.buildSuccess(orderList);
     }
 
@@ -51,19 +56,32 @@ public class OrderController {
     @GetMapping("get_product_in_order_history")
     public JsonData getProductInOrderHistory() {
 
-        int uid = LoginInterceptor.currentUserID;
-        if (uid == -1) {
-            return JsonData.buildError("Not looged in");
-        }
+        int uid = 19;
+
+//        int uid = LoginInterceptor.currentUserID;
+//        if (uid == -1) {
+//            return JsonData.buildError("Not looged in");
+//        }
 
         List<Order> orderList = userService.getAllOrderByUserId(uid);
 
-        List<Product> productList = new ArrayList<>();
+        List<OrderDisplay> orderDisplayList = new ArrayList<>();
+        OrderDisplay orderDisplay;
         for (Order order: orderList) {
             int productId = order.getProductId();
-            productList.add(productService.getProductById(productId));
+            Product product = productService.getProductById(productId);
+
+            orderDisplay = new OrderDisplay();
+
+            orderDisplay.setCount(order.getCount());
+            orderDisplay.setCreateTime(order.getCreateTime());
+            orderDisplay.setImg(product.getImg());
+            orderDisplay.setName(product.getName());
+            orderDisplay.setPrice(product.getPrice());
+
+            orderDisplayList.add(orderDisplay);
         }
-        return JsonData.buildSuccess(productList);
+        return JsonData.buildSuccess(orderDisplayList);
     }
 
     /**
