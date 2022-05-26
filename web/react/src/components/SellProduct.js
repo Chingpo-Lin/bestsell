@@ -28,7 +28,8 @@ export default class SellProduct extends Component{
             categoryId:"-1",
             allCategories:[],
             imgPreview:"",
-            showDialog:false
+            showDialog:false,
+            disableButton:false
         };
     }
 
@@ -65,6 +66,7 @@ export default class SellProduct extends Component{
 
     //sell product handler
     sellProduct = (e) =>{
+        this.setState({disableButton:true});
         e.preventDefault();
         const{ price, img, description, stock, productName, categoryId } = this.state;
         if(!price||!img||!description||!stock||!productName||categoryId==="-1"){
@@ -111,6 +113,7 @@ export default class SellProduct extends Component{
         .catch(error => {
             console.log("sell_product_error", error);
         });
+        this.setState({disableButton:false});
     };
 
     render(){
@@ -169,7 +172,7 @@ export default class SellProduct extends Component{
                                     <div className = "has-text-danger"> { this.state.error }</div>
                                 )}
                                 <div id="submit">
-                                    <button>Submit</button>
+                                    <button disabled={this.state.disableButton}>Submit</button>
                                 </div>
                                 <br/>
                             </form>

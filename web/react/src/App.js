@@ -18,7 +18,7 @@ export default class App extends React.Component {
       // localStorage.getItem("cartItems")?
       //   JSON.parse(localStorage.getItem("cartItems")):[],
       size:"",
-      sort:"",
+      sort:"latest",
       isLoggedIn: false,
       username:"",
       cartLength: 0,
@@ -42,9 +42,12 @@ export default class App extends React.Component {
     axios.get(global.AppConfig.serverIp + "/pub/product/list_all_product")
       .then((response) => {
         console.log("List_All_Products_Response",response.data);
+        let sortedProducts = response.data.data.slice().sort((a,b) =>(
+          ((a.id < b.id)? 1:-1)
+        ))
         this.setState({
-          products:response.data.data,
-          allProducts: response.data.data
+          products:sortedProducts,
+          allProducts:sortedProducts
         })
       })
       .catch(function (error) {
@@ -143,36 +146,26 @@ export default class App extends React.Component {
   //sort products in order of latest, lowest and highest
   sortProducts = (event) => {
     const sort = event.target.value;
-    console.log(event.target.value);
-    this.setState(state => ({
+    this.setState({
       sort: sort,
       products: this.state.products.slice().sort((a,b) =>(
-        sort === "lowest"?
+        sort === "lowest" ?
         ((a.price > b.price)? 1:-1):
-        sort === "highest"?
+        sort === "highest" ?
         ((a.price < b.price)? 1:-1):
         ((a.id < b.id)? 1:-1)
       ))
-    }))
+    })
   };
 
   //filter products in order of sizes
   filterProducts = (event) => {
-    if(event.target.value === ""){
-      this.setState({
-        size: event.target.value,
-        products: this.state.allProducts,
-        sort: ""});
-    } else{
-      let products = this.state.allProducts;
-      this.setState ({
-        size: event.target.value,
-        sort: "",
-        products: products.filter( // filter array
-          (product) => product.categoryId === parseInt(event.target.value)
-        )
-      });
-    }
+    let products = this.state.allProducts;
+    this.setState({
+      size: event.target.value,
+      sort: "lastest",
+      products: event.target.value === "" ? this.state.allProducts : products.filter((product) => product.categoryId === parseInt(event.target.value))
+    });
   };
 
   //handle login & logout button
@@ -226,14 +219,6 @@ export default class App extends React.Component {
               removeCount={this.removeCount}
             />
           </div>
-          {/* <Badge color="secondary" badgeContent={this.state.cartLength} classes={{ badge: classes.badge }}>
-          <div className="sidebar">
-            <CartModal 
-              createOrder={this.createOrder}
-              removeCount={this.removeCount}
-            />
-          </div>
-          </Badge> */}
             <div className="navbar">
               <div className="dropdown">
                 <button className="dropbtn"> {this.state.username}
