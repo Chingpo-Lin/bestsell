@@ -27,28 +27,6 @@ public class OrderController {
     public ProductService productService;
 
     /**
-     * get order of given user
-     * localhost:8080/pri/order/get_user_order
-     * don't use it, will delete soon
-     * don't use it, will delete soon
-     * don't use it, will delete soon
-     * @return
-     */
-    @GetMapping("get_user_order")
-    @Deprecated
-    public JsonData getOrderByUserId() {
-
-        int uid = LoginInterceptor.currentUserID;
-        if (uid == -1) {
-            return JsonData.buildError("Not looged in");
-        }
-
-        List<Order> orderList = userService.getAllOrderByUserId(uid);
-        System.out.println(orderList);
-        return JsonData.buildSuccess(orderList);
-    }
-
-    /**
      * get product in current user's order
      * localhost:8080/pri/cart/get_product_in_cart
      * @return
