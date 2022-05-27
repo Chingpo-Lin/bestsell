@@ -123,7 +123,10 @@ export default class App extends React.Component {
           }, 3000);
         }
         else{
-          this.setState({ cartLength: this.state.cartLength+1 });
+          this.setState({cartLength: this.state.cartLength+1, dialogMessage:"Product Added!", showDialog:true});
+          setTimeout(()=>{
+            this.setState({showDialog:false});
+          }, 2000);
         }
       })
       .catch(function (error){

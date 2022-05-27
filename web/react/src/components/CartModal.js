@@ -23,7 +23,8 @@ export default class CartModal extends Component {
         order:[],
         totalPrice:0,
         orderSuccessful:false,
-        cart:[]
+        cart:[],
+        disableButton:false
       };
     }
 
@@ -143,6 +144,7 @@ export default class CartModal extends Component {
   };
 
   handleCheckOutButton = () => {
+    this.setState({disableButton:true});
     axios.post(
       global.AppConfig.serverIp+"/pri/order/place_order", {}, {withCredentials: true}
     )
@@ -161,6 +163,7 @@ export default class CartModal extends Component {
     .catch(function (error){
       console.log("place_order_error",error);
     })
+    this.setState({disableButton:false});
   }
 
   render() {
@@ -271,7 +274,7 @@ export default class CartModal extends Component {
                         <p>{this.state.address}</p>
                       </li>
                       <li>
-                        <button className='proceed button' onClick={this.handleCheckOutButton} >check out</button>
+                        <button className='proceed button' disabled={this.state.disableButton} onClick={this.handleCheckOutButton} >check out</button>
                       </li>
                     </ul>
                   </form>

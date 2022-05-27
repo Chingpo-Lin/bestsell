@@ -11,9 +11,7 @@ export default class History extends Component {
             sellHistory: false,
             order:[],
             Products:[]
-
         }
-        
     }
 
     componentDidMount() {
@@ -51,18 +49,6 @@ export default class History extends Component {
         //     .catch(function (error) {
         //     console.log("List_All_Products_Error",error);
         //   })
-
-          axios.get(global.AppConfig.serverIp + "/pri/order/get_user_order",{ withCredentials: true })
-          .then((response) => {
-            console.log("get_user_order_Response",response.data);
-            this.setState({
-              order:response.data.data
-            })
-            console.log("get_user_order: ", this.state.order);
-          })
-          .catch(function (error) {
-            console.log("get_user_order_Error",error);
-          })
           
         }
 
