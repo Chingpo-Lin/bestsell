@@ -1,0 +1,30 @@
+
+server:
+  port: 8080
+
+# open terminal printsql, testing purpose
+#mybatis.configuration.log-impl=org.apache.ibatis.logging.stdout.StdOutImpl
+
+# mybatis underscore to camel case (solve result map bug)
+
+#scan mapper
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.webdesign.bestsell.domain
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+#mybatis-plus:
+#  configuration:
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+spring:
+  # db setting
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://120.24.94.91:3306/bestsell?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=PST
+    username: root
+    password: cannot tell you
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
